@@ -184,39 +184,39 @@ export default async function Home() {
                 of clients
               </h2>
             </Reveal>
-            <div className="no-scrollbar -mx-5 flex snap-x gap-4 overflow-x-auto px-5 sm:mx-0 sm:px-0">
+            <div className="no-scrollbar -mx-5 flex snap-x gap-6 overflow-x-auto px-5 pt-7 sm:mx-0 sm:px-0">
               {testimonials.map((t, i) => {
                 const dark = i % 2 === 0;
                 return (
                   <figure
                     key={t.id}
-                    className={`w-[85%] shrink-0 snap-start rounded-card-lg p-7 sm:w-[420px] ${
+                    className={`relative flex w-[78%] shrink-0 snap-start flex-col items-center rounded-card-lg p-7 pt-10 text-center sm:w-[340px] ${
                       dark ? "bg-burgundy text-cream" : "bg-pink text-ink"
                     }`}
                   >
                     {t.avatar_url && (
-                      <div className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-paper p-1.5 shadow-sm">
+                      <div className="absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full bg-paper p-2 shadow-md">
                         <Image
                           src={t.avatar_url}
                           alt=""
-                          width={30}
-                          height={30}
+                          width={36}
+                          height={36}
                           className="max-h-full max-w-full object-contain"
                         />
                       </div>
                     )}
                     <span
-                      className={`font-display text-4xl ${
+                      className={`font-display text-4xl leading-none ${
                         dark ? "text-cream/30" : "text-ink/20"
                       }`}
                     >
                       &ldquo;
                     </span>
-                    <blockquote className="-mt-3 text-lg leading-relaxed">
+                    <blockquote className="mt-2 line-clamp-6 text-base leading-relaxed">
                       {t.quote}
                     </blockquote>
                     <figcaption
-                      className={`mt-4 text-sm ${
+                      className={`mt-5 text-sm ${
                         dark ? "text-cream/70" : "text-ink/60"
                       }`}
                     >
