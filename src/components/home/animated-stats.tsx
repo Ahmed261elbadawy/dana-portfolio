@@ -31,10 +31,15 @@ function useInView<T extends HTMLElement>() {
   return { ref, inView };
 }
 
-function randomWord(text: string) {
+function randomWord(text: string, lockedCount = 0) {
   let out = "";
-  for (const ch of text) {
-    out += ch === " " ? " " : SCRAMBLE_CHARS[(Math.random() * 26) | 0];
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === " " || i < lockedCount) {
+      out += ch;
+    } else {
+      out += SCRAMBLE_CHARS[(Math.random() * 26) | 0];
+    }
   }
   return out;
 }
@@ -70,15 +75,22 @@ function AnimatedStat({ stat, active }: { stat: Stat; active: boolean }) {
       return () => clearInterval(id);
     }
 
-    // Scramble: whole word randomizes, then locks to the real text.
+    // Scramble: whole word randomizes, then settles into place one
+    // character at a time, left to right, instead of snapping all at once.
     const finalText = stat.value;
-    const scrambleDuration = 1000;
-    const tickMs = 70;
+    const randomizeDuration = 500;
+    const settleDuration = 550;
+    const tickMs = 65;
     const start = Date.now();
     const id = setInterval(() => {
-      if (Date.now() - start >= scrambleDuration) {
+      const elapsed = Date.now() - start;
+      if (elapsed >= randomizeDuration + settleDuration) {
         setDisplay(finalText);
         clearInterval(id);
+      } else if (elapsed >= randomizeDuration) {
+        const settleProgress = (elapsed - randomizeDuration) / settleDuration;
+        const lockedCount = Math.floor(settleProgress * finalText.length);
+        setDisplay(randomWord(finalText, lockedCount));
       } else {
         setDisplay(randomWord(finalText));
       }
