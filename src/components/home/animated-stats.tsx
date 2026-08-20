@@ -21,7 +21,7 @@ function useInView<T extends HTMLElement>() {
           observer.disconnect();
         }
       },
-      { threshold: 0.4 },
+      { threshold: 0.3 },
     );
 
     observer.observe(el);
@@ -31,10 +31,18 @@ function useInView<T extends HTMLElement>() {
   return { ref, inView };
 }
 
+function randomWord(text: string) {
+  let out = "";
+  for (const ch of text) {
+    out += ch === " " ? " " : SCRAMBLE_CHARS[(Math.random() * 26) | 0];
+  }
+  return out;
+}
+
 function AnimatedStat({ stat, active }: { stat: Stat; active: boolean }) {
-  const numMatch = stat.value.match(/^(\d+)(\+?)$/);
   const [display, setDisplay] = useState(stat.value);
 
+  // Runs exactly once, when this stat becomes visible.
   useEffect(() => {
     if (!active) return;
 
@@ -42,49 +50,42 @@ function AnimatedStat({ stat, active }: { stat: Stat; active: boolean }) {
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
-      setDisplay(stat.value);
       return;
     }
 
-    let raf: number;
-    const start = performance.now();
+    const numMatch = stat.value.match(/^(\d+)(\+?)$/);
 
     if (numMatch) {
       const target = parseInt(numMatch[1], 10);
       const suffix = numMatch[2];
-      const duration = 900;
-
-      const tick = (now: number) => {
-        const progress = Math.min((now - start) / duration, 1);
-        setDisplay(Math.round(progress * target) + suffix);
-        if (progress < 1) raf = requestAnimationFrame(tick);
-      };
-      raf = requestAnimationFrame(tick);
-    } else {
-      const finalText = stat.value;
-      const duration = 600;
-
-      const tick = (now: number) => {
-        const progress = Math.min((now - start) / duration, 1);
-        const revealCount = Math.floor(progress * finalText.length);
-        let out = "";
-        for (let i = 0; i < finalText.length; i++) {
-          if (i < revealCount || finalText[i] === " ") {
-            out += finalText[i];
-          } else {
-            out +=
-              SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-          }
-        }
-        setDisplay(out);
-        if (progress < 1) raf = requestAnimationFrame(tick);
-        else setDisplay(finalText);
-      };
-      raf = requestAnimationFrame(tick);
+      const steps = Math.min(target, 16) || 1;
+      setDisplay("0" + suffix);
+      let step = 0;
+      const id = setInterval(() => {
+        step++;
+        const value = Math.round((step / steps) * target);
+        setDisplay(value + suffix);
+        if (step >= steps) clearInterval(id);
+      }, 900 / steps);
+      return () => clearInterval(id);
     }
 
-    return () => cancelAnimationFrame(raf);
-  }, [active, stat.value, numMatch]);
+    // Scramble: whole word randomizes, then locks to the real text.
+    const finalText = stat.value;
+    const scrambleDuration = 1000;
+    const tickMs = 70;
+    const start = Date.now();
+    const id = setInterval(() => {
+      if (Date.now() - start >= scrambleDuration) {
+        setDisplay(finalText);
+        clearInterval(id);
+      } else {
+        setDisplay(randomWord(finalText));
+      }
+    }, tickMs);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
 
   return (
     <div>
