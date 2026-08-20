@@ -190,17 +190,17 @@ export default async function Home() {
                 return (
                   <figure
                     key={t.id}
-                    className={`relative flex w-[78%] shrink-0 snap-start flex-col items-center rounded-card-lg p-7 pt-10 text-center sm:w-[340px] ${
+                    className={`relative flex w-[62%] shrink-0 snap-start flex-col items-center rounded-card-lg px-6 pb-12 pt-9 text-center sm:w-[280px] ${
                       dark ? "bg-burgundy text-cream" : "bg-pink text-ink"
                     }`}
                   >
                     {t.avatar_url && (
-                      <div className="absolute -top-7 left-1/2 flex h-14 w-14 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full bg-paper p-2 shadow-md">
+                      <div className="absolute -top-5 left-1/2 flex h-11 w-11 -translate-x-1/2 items-center justify-center overflow-hidden rounded-full bg-paper p-1.5 shadow-md">
                         <Image
                           src={t.avatar_url}
                           alt=""
-                          width={36}
-                          height={36}
+                          width={28}
+                          height={28}
                           className="max-h-full max-w-full object-contain"
                         />
                       </div>
@@ -239,10 +239,10 @@ export default async function Home() {
       >
         <Reveal className="mx-auto max-w-3xl space-y-7 text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
-            Let&apos;s work together
+            Get in touch
           </p>
           <h2 className="font-display text-display-lg leading-[0.95]">
-            Let&apos;s make something.
+            Let&apos;s work together.
           </h2>
           <p className="mx-auto max-w-md text-ink/70">
             Reach out for brand strategy, content creation, or a full
