@@ -20,7 +20,10 @@ export default async function SiteLayout({
     <div className="flex min-h-full flex-col">
       <SiteHeader />
       <div className="flex-1">{children}</div>
-      <SiteFooter email={settings?.email ?? undefined} />
+      <SiteFooter
+        email={settings?.email ?? undefined}
+        whatsapp={settings?.whatsapp ?? undefined}
+      />
       <WhatsappButton whatsapp={settings?.whatsapp || FALLBACK_WHATSAPP} />
     </div>
   );
