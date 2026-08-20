@@ -3,7 +3,9 @@ import { WorkGrid } from "@/components/home/work-grid";
 import { MarqueeBand } from "@/components/home/marquee-band";
 import { Polaroid } from "@/components/home/polaroid";
 import { InquiryForm } from "@/components/home/inquiry-form";
+import { AnimatedStats } from "@/components/home/animated-stats";
 import { Reveal } from "@/components/reveal";
+import { BoldText } from "@/components/bold-text";
 import {
   FALLBACK_EMAIL,
   FALLBACK_INTRO,
@@ -71,37 +73,18 @@ export default async function Home() {
               Dana Badawy
             </h1>
 
-            <p className="max-w-2xl text-lg text-cream/80 sm:text-xl">
-              {intro}
-            </p>
-
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <a
-                href="#work"
-                className="rounded-pill bg-cream px-7 py-3.5 text-sm font-semibold text-burgundy transition-transform hover:scale-[1.03]"
-              >
-                See the work ↗
-              </a>
-              <a
-                href="#contact"
-                className="rounded-md border border-cream/30 px-7 py-3.5 text-sm font-semibold transition-colors hover:bg-cream hover:text-burgundy"
-              >
-                Get in touch
-              </a>
+            <div className="max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl">
+              {intro
+                .split("\n\n")
+                .filter(Boolean)
+                .map((para, i) => (
+                  <p key={i}>
+                    <BoldText text={para} />
+                  </p>
+                ))}
             </div>
 
-            <div className="flex flex-wrap gap-x-8 gap-y-3 pt-4">
-              {FALLBACK_STATS.map((s) => (
-                <div key={s.label}>
-                  <p className="font-display text-2xl text-yellow-deep">
-                    {s.value}
-                  </p>
-                  <p className="text-xs uppercase tracking-wide text-cream/50">
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <AnimatedStats stats={FALLBACK_STATS} />
           </div>
 
           <div className="mx-auto w-full max-w-[280px] lg:max-w-none">
