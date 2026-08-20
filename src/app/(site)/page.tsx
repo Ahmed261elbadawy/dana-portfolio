@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { WorkGrid } from "@/components/home/work-grid";
 import { MarqueeBand } from "@/components/home/marquee-band";
+import { TrustedStrip } from "@/components/home/trusted-strip";
 import { Polaroid } from "@/components/home/polaroid";
 import { InquiryForm } from "@/components/home/inquiry-form";
 import { AnimatedStats } from "@/components/home/animated-stats";
@@ -99,6 +100,7 @@ export default async function Home() {
       </section>
 
       <MarqueeBand />
+      <TrustedStrip />
 
       {/* Services: what I actually do */}
       <section
@@ -107,10 +109,10 @@ export default async function Home() {
       >
         <div className="mx-auto max-w-6xl space-y-10">
           <Reveal className="max-w-2xl space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
+            <p className="text-lg font-semibold uppercase tracking-wide text-burgundy">
               What I actually do
             </p>
-            <h2 className="font-display text-display-md">
+            <h2 className="font-display text-2xl text-burgundy sm:text-3xl">
               Five ways I plug into a brand
             </h2>
           </Reveal>
