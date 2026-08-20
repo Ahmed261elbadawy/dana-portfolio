@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { WorkGrid } from "@/components/home/work-grid";
 import { MarqueeBand } from "@/components/home/marquee-band";
@@ -173,60 +174,96 @@ export default async function Home() {
 
       {/* Feedback */}
       {testimonials && testimonials.length > 0 && (
-        <section className="bg-burgundy px-5 py-14 text-cream sm:px-8 sm:py-20 lg:px-16">
+        <section className="bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16">
           <div className="mx-auto max-w-6xl space-y-8">
-            <Reveal>
-              <h2 className="font-display text-display-md">Feedback</h2>
+            <Reveal className="space-y-1">
+              <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
+                Testimonials
+              </p>
+              <h2 className="font-display text-display-md text-burgundy">
+                of clients
+              </h2>
             </Reveal>
             <div className="no-scrollbar -mx-5 flex snap-x gap-4 overflow-x-auto px-5 sm:mx-0 sm:px-0">
-              {testimonials.map((t) => (
-                <figure
-                  key={t.id}
-                  className="w-[85%] shrink-0 snap-start rounded-card-lg bg-burgundy-light p-7 sm:w-[420px]"
-                >
-                  <span className="font-display text-4xl text-cream/30">
-                    &ldquo;
-                  </span>
-                  <blockquote className="-mt-3 text-lg leading-relaxed">
-                    {t.quote}
-                  </blockquote>
-                  <figcaption className="mt-4 text-sm text-cream/70">
-                    {t.author}
-                    {t.role ? `, ${t.role}` : ""}
-                    {t.brand ? ` · ${t.brand}` : ""}
-                  </figcaption>
-                </figure>
-              ))}
+              {testimonials.map((t, i) => {
+                const dark = i % 2 === 0;
+                return (
+                  <figure
+                    key={t.id}
+                    className={`w-[85%] shrink-0 snap-start rounded-card-lg p-7 sm:w-[420px] ${
+                      dark ? "bg-burgundy text-cream" : "bg-pink text-ink"
+                    }`}
+                  >
+                    {t.avatar_url && (
+                      <div className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-paper p-1.5 shadow-sm">
+                        <Image
+                          src={t.avatar_url}
+                          alt=""
+                          width={30}
+                          height={30}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </div>
+                    )}
+                    <span
+                      className={`font-display text-4xl ${
+                        dark ? "text-cream/30" : "text-ink/20"
+                      }`}
+                    >
+                      &ldquo;
+                    </span>
+                    <blockquote className="-mt-3 text-lg leading-relaxed">
+                      {t.quote}
+                    </blockquote>
+                    <figcaption
+                      className={`mt-4 text-sm ${
+                        dark ? "text-cream/70" : "text-ink/60"
+                      }`}
+                    >
+                      <span className="block font-semibold">{t.author}</span>
+                      {t.role && <span className="block">{t.role}</span>}
+                      {t.brand && <span className="block">{t.brand}</span>}
+                    </figcaption>
+                  </figure>
+                );
+              })}
             </div>
           </div>
         </section>
       )}
 
-      {/* Contact: inquiry form + direct links */}
+      {/* Contact: direct links */}
       <section
         id="contact"
-        className="scroll-mt-20 bg-pink px-5 py-16 sm:px-8 sm:py-24 lg:px-16"
+        className="scroll-mt-20 bg-pink px-5 py-20 sm:px-8 sm:py-28 lg:px-16"
       >
-        <div className="mx-auto max-w-3xl space-y-8">
-          <Reveal className="space-y-3 text-center">
-            <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
-              Let&apos;s work together
-            </p>
-            <h2 className="font-display text-display-lg leading-[0.95]">
-              Let&apos;s make something.
-            </h2>
-            <p className="mx-auto max-w-md text-ink/70">
-              Tell me what you need, or reach out directly, whatever&apos;s
-              easiest.
-            </p>
-          </Reveal>
-
-          <Reveal>
-            <InquiryForm email={email} whatsappHref={whatsappHref} />
-          </Reveal>
-
-          {cvUrl && (
-            <p className="text-center">
+        <Reveal className="mx-auto max-w-3xl space-y-7 text-center">
+          <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
+            Let&apos;s work together
+          </p>
+          <h2 className="font-display text-display-lg leading-[0.95]">
+            Let&apos;s make something.
+          </h2>
+          <p className="mx-auto max-w-md text-ink/70">
+            Reach out for brand strategy, content creation, or a full
+            campaign, whatever the brief is.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <a
+              href={`mailto:${email}`}
+              className="rounded-pill bg-burgundy px-8 py-4 text-sm font-semibold text-cream transition-transform hover:scale-[1.03]"
+            >
+              Email ↗
+            </a>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-md border border-ink/20 px-8 py-4 text-sm font-semibold transition-colors hover:bg-ink hover:text-cream"
+            >
+              WhatsApp
+            </a>
+            {cvUrl && (
               <a
                 href={cvUrl}
                 target="_blank"
@@ -235,9 +272,9 @@ export default async function Home() {
               >
                 Download CV
               </a>
-            </p>
-          )}
-        </div>
+            )}
+          </div>
+        </Reveal>
       </section>
     </>
   );

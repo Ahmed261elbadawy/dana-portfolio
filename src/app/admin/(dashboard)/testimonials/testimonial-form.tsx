@@ -76,16 +76,19 @@ export function TestimonialForm({ testimonial }: { testimonial?: Testimonial }) 
 
       <div className="space-y-1.5">
         <label htmlFor="avatar" className="text-sm font-medium text-ink/80">
-          Photo (optional)
+          Brand logo (optional)
         </label>
+        <p className="text-xs text-ink/50">
+          Shown as a small badge on the testimonial card.
+        </p>
         {avatarPreview && (
-          <div className="mb-2 h-16 w-16 overflow-hidden rounded-full border border-ink/10 bg-paper">
+          <div className="mb-2 flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border border-ink/10 bg-paper p-2">
             <Image
               src={avatarPreview}
               alt=""
-              width={64}
-              height={64}
-              className="h-full w-full object-cover"
+              width={48}
+              height={48}
+              className="max-h-full max-w-full object-contain"
               unoptimized
             />
           </div>

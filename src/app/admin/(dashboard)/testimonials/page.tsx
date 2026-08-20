@@ -39,14 +39,14 @@ export default async function TestimonialsPage() {
               key={t.id}
               className="flex flex-wrap items-center gap-4 rounded-card bg-paper p-4"
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-ink/10 bg-cream">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-ink/10 bg-cream p-1.5">
                 {t.avatar_url ? (
                   <Image
                     src={t.avatar_url}
                     alt=""
-                    width={48}
-                    height={48}
-                    className="h-full w-full object-cover"
+                    width={36}
+                    height={36}
+                    className="max-h-full max-w-full object-contain"
                     unoptimized
                   />
                 ) : (
