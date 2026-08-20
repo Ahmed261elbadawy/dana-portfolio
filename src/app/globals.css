@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Palette */
+  --color-cream: #f7f1e6;
+  --color-pink: #f7d3e0;
+  --color-pink-deep: #f0b8cf;
+  --color-yellow: #f6e4c0;
+  --color-yellow-deep: #f5c465;
+  --color-burgundy: #4a1226;
+  --color-burgundy-light: #6e1f3a;
+  --color-ink: #141414;
+  --color-paper: #ffffff;
+
+  /* Radii */
+  --radius-card: 20px;
+  --radius-card-lg: 28px;
+  --radius-pill: 999px;
+
+  /* Fluid type scale */
+  --font-size-display-xl: clamp(2.5rem, 6vw + 1rem, 6rem);
+  --font-size-display-lg: clamp(2rem, 4.5vw + 1rem, 4rem);
+  --font-size-display-md: clamp(1.5rem, 3vw + 1rem, 2.75rem);
+  --font-size-display-sm: clamp(1.25rem, 1.5vw + 1rem, 1.75rem);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-cream: var(--color-cream);
+  --color-pink: var(--color-pink);
+  --color-pink-deep: var(--color-pink-deep);
+  --color-yellow: var(--color-yellow);
+  --color-yellow-deep: var(--color-yellow-deep);
+  --color-burgundy: var(--color-burgundy);
+  --color-burgundy-light: var(--color-burgundy-light);
+  --color-ink: var(--color-ink);
+  --color-paper: var(--color-paper);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --radius-card: var(--radius-card);
+  --radius-card-lg: var(--radius-card-lg);
+  --radius-pill: var(--radius-pill);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-wordmark: var(--font-wordmark);
+
+  --text-display-xl: var(--font-size-display-xl);
+  --text-display-lg: var(--font-size-display-lg);
+  --text-display-md: var(--font-size-display-md);
+  --text-display-sm: var(--font-size-display-sm);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+.font-wordmark {
+  font-family: var(--font-wordmark), Arial Black, sans-serif;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
