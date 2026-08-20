@@ -118,15 +118,13 @@ export default async function Home() {
             </h2>
           </Reveal>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="flex flex-wrap justify-center gap-4">
             {FALLBACK_SERVICES.map((s, i) => {
               const block = SERVICE_BLOCKS[i % SERVICE_BLOCKS.length];
               return (
                 <div
                   key={s.title}
-                  className={`flex flex-col gap-4 rounded-card-lg p-6 ${block.bg} ${block.text} ${
-                    i === 0 ? "sm:col-span-2 lg:col-span-1" : ""
-                  }`}
+                  className={`flex w-full flex-col gap-4 rounded-card-lg p-6 sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)] ${block.bg} ${block.text}`}
                 >
                   <span
                     className={`font-display text-3xl ${
@@ -216,7 +214,7 @@ export default async function Home() {
                       {t.quote}
                     </blockquote>
                     <figcaption
-                      className={`mt-5 text-sm ${
+                      className={`mt-auto pt-5 text-sm ${
                         dark ? "text-cream/70" : "text-ink/60"
                       }`}
                     >
@@ -253,7 +251,7 @@ export default async function Home() {
               href={`mailto:${email}`}
               className="rounded-pill bg-burgundy px-8 py-4 text-sm font-semibold text-cream transition-transform hover:scale-[1.03]"
             >
-              Email ↗
+              Email
             </a>
             <a
               href={whatsappHref}
