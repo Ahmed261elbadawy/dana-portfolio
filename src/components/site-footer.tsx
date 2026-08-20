@@ -24,7 +24,6 @@ export function SiteFooter({
               width={34}
               height={34}
             />
-            <p className="font-display text-2xl italic">Dana Badawy</p>
             <p className="max-w-xs text-sm leading-relaxed text-cream/50">
               Content, brand strategy, and social media marketing for food
               and lifestyle brands, from the raw idea to execution.

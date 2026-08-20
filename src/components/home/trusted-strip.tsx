@@ -21,7 +21,10 @@ const BRANDS = [
 
 export function TrustedStrip() {
   return (
-    <div className="bg-yellow px-5 py-10 sm:px-8 sm:py-14 lg:px-16">
+    <div
+      data-nav-theme="light"
+      className="bg-yellow px-5 py-10 sm:px-8 sm:py-14 lg:px-16"
+    >
       <div className="mx-auto max-w-6xl space-y-6">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-ink/40">
           Brands I&apos;ve worked with

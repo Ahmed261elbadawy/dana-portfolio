@@ -10,7 +10,10 @@ export function MarqueeBand() {
   const track = [...WORDS, ...WORDS];
 
   return (
-    <div className="overflow-hidden border-y border-ink/10 bg-cream py-2">
+    <div
+      data-nav-theme="light"
+      className="overflow-hidden border-y border-ink/10 bg-cream py-2"
+    >
       <div className="marquee-track flex w-max items-center gap-5 motion-reduce:animate-none">
         {[0, 1].map((copy) => (
           <div key={copy} className="flex shrink-0 items-center gap-5">

@@ -58,6 +58,7 @@ export default async function Home() {
       {/* Hero: Dana Badawy */}
       <section
         id="about"
+        data-nav-theme="dark"
         className="scroll-mt-20 bg-burgundy px-5 pb-16 pt-28 text-cream sm:px-8 sm:pb-24 sm:pt-32 lg:px-16"
       >
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
@@ -106,6 +107,7 @@ export default async function Home() {
       {/* Services: what I actually do */}
       <section
         id="services"
+        data-nav-theme="light"
         className="scroll-mt-20 px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
       >
         <div className="mx-auto max-w-6xl space-y-10">
@@ -147,6 +149,7 @@ export default async function Home() {
       {/* Featured work */}
       <section
         id="work"
+        data-nav-theme="dark"
         className="scroll-mt-20 rounded-t-card-lg bg-burgundy px-5 py-14 text-cream sm:px-8 sm:py-20 lg:px-16"
       >
         <div className="mx-auto max-w-6xl space-y-8">
@@ -172,7 +175,10 @@ export default async function Home() {
 
       {/* Feedback */}
       {testimonials && testimonials.length > 0 && (
-        <section className="bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16">
+        <section
+          data-nav-theme="light"
+          className="bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
+        >
           <div className="mx-auto max-w-6xl space-y-8">
             <Reveal className="space-y-1">
               <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
@@ -233,6 +239,7 @@ export default async function Home() {
       {/* Contact: direct links */}
       <section
         id="contact"
+        data-nav-theme="light"
         className="scroll-mt-20 bg-pink px-5 py-20 sm:px-8 sm:py-28 lg:px-16"
       >
         <Reveal className="mx-auto max-w-3xl space-y-7 text-center">
