@@ -188,7 +188,7 @@ export default async function Home() {
                 of clients
               </h2>
             </Reveal>
-            <div className="no-scrollbar -mx-5 flex snap-x gap-6 overflow-x-auto px-5 pt-7 sm:mx-0 sm:px-0">
+            <div className="no-scrollbar -mx-5 flex snap-x justify-center gap-6 overflow-x-auto px-5 pt-7 sm:mx-0 sm:px-0">
               {testimonials.map((t, i) => {
                 const dark = i % 2 === 0;
                 return (
