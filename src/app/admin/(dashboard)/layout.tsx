@@ -5,9 +5,7 @@ import { signOut } from "@/app/admin/actions";
 const navItems = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/projects", label: "Projects" },
-  { href: "/admin/inquiries", label: "Inquiries" },
   { href: "/admin/testimonials", label: "Testimonials" },
-  { href: "/admin/analytics", label: "Analytics" },
   { href: "/admin/settings", label: "Site settings" },
 ];
 
