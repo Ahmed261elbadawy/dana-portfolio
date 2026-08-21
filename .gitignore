@@ -44,3 +44,4 @@ next-env.d.ts
 /scratch/
 Screenshot *.png
 /D.png
+supabase/.temp/

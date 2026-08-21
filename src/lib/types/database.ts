@@ -97,6 +97,13 @@ export type Testimonial = {
   created_at: string;
 };
 
+export type PageView = {
+  id: string;
+  session_id: string;
+  path: string;
+  created_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -140,6 +147,12 @@ export interface Database {
         Row: Testimonial;
         Insert: Partial<Testimonial>;
         Update: Partial<Testimonial>;
+        Relationships: [];
+      };
+      page_views: {
+        Row: PageView;
+        Insert: Partial<PageView>;
+        Update: Partial<PageView>;
         Relationships: [];
       };
     };
