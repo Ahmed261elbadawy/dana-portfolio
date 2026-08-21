@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Brand } from "@/lib/types/database";
 import { SERVICE_LABELS } from "@/lib/content";
+import { TiltCard } from "@/components/tilt-card";
 
 const TILTS = ["-2deg", "1.5deg", "-1deg", "2deg", "-1.5deg"];
 
@@ -59,6 +60,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
               href={`/work/${project.slug}`}
               className="group w-[50%] min-w-[168px] shrink-0 snap-start sm:w-72"
             >
+              <TiltCard>
               <div
                 className="rounded-sm bg-paper p-2.5 pb-4 shadow-[0_18px_40px_-14px_rgba(20,20,20,0.28)] transition-transform duration-300 ease-out group-hover:!rotate-0 group-hover:-translate-y-1.5 group-hover:shadow-[0_26px_50px_-14px_rgba(20,20,20,0.34)] sm:p-3.5 sm:pb-5"
                 style={{ transform: `rotate(${tilt})` }}
@@ -115,6 +117,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
                   )}
                 </div>
               </div>
+              </TiltCard>
             </Link>
           );
         })}

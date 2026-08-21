@@ -4,10 +4,11 @@ import { WorkGrid } from "@/components/home/work-grid";
 import { MarqueeBand } from "@/components/home/marquee-band";
 import { TrustedStrip } from "@/components/home/trusted-strip";
 import { Polaroid } from "@/components/home/polaroid";
-import { InquiryForm } from "@/components/home/inquiry-form";
 import { AnimatedStats } from "@/components/home/animated-stats";
 import { Reveal } from "@/components/reveal";
 import { BoldText } from "@/components/bold-text";
+import { Magnetic } from "@/components/magnetic";
+import { TiltCard } from "@/components/tilt-card";
 import {
   FALLBACK_EMAIL,
   FALLBACK_INTRO,
@@ -90,14 +91,14 @@ export default async function Home() {
             <AnimatedStats stats={FALLBACK_STATS} />
           </div>
 
-          <div className="mx-auto w-full max-w-[280px] lg:max-w-none">
+          <TiltCard className="mx-auto w-full max-w-[280px] lg:max-w-none">
             <Polaroid
               photoUrl={photoUrl}
               name="Dana Badawy"
               caption="Let's talk ↓"
               captionHref="#contact"
             />
-          </div>
+          </TiltCard>
         </div>
       </section>
 
@@ -124,22 +125,27 @@ export default async function Home() {
             {FALLBACK_SERVICES.map((s, i) => {
               const block = SERVICE_BLOCKS[i % SERVICE_BLOCKS.length];
               return (
-                <div
+                <Reveal
                   key={s.title}
-                  className={`flex w-full flex-col gap-4 rounded-card-lg p-6 sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)] ${block.bg} ${block.text}`}
+                  delayMs={i * 80}
+                  className="w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]"
                 >
-                  <span
-                    className={`font-display text-3xl ${
-                      block.text === "text-cream" ? "text-cream/40" : "text-ink/25"
-                    }`}
+                  <TiltCard
+                    className={`flex h-full flex-col gap-4 rounded-card-lg p-6 ${block.bg} ${block.text}`}
                   >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="font-display text-xl">{s.title}</h3>
-                  <p className={block.text === "text-cream" ? "text-cream/75" : "text-ink/70"}>
-                    {s.description}
-                  </p>
-                </div>
+                    <span
+                      className={`font-display text-3xl ${
+                        block.text === "text-cream" ? "text-cream/40" : "text-ink/25"
+                      }`}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="font-display text-xl">{s.title}</h3>
+                    <p className={block.text === "text-cream" ? "text-cream/75" : "text-ink/70"}>
+                      {s.description}
+                    </p>
+                  </TiltCard>
+                </Reveal>
               );
             })}
           </div>
@@ -254,20 +260,24 @@ export default async function Home() {
             campaign, whatever the brief is.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <a
-              href={`mailto:${email}`}
-              className="rounded-pill bg-burgundy px-8 py-4 text-sm font-semibold text-cream transition-transform hover:scale-[1.03]"
-            >
-              Email
-            </a>
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-md border border-ink/20 px-8 py-4 text-sm font-semibold transition-colors hover:bg-ink hover:text-cream"
-            >
-              WhatsApp
-            </a>
+            <Magnetic>
+              <a
+                href={`mailto:${email}`}
+                className="inline-block rounded-pill bg-burgundy px-8 py-4 text-sm font-semibold text-cream transition-transform hover:scale-[1.03]"
+              >
+                Email
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block rounded-md border border-ink/20 px-8 py-4 text-sm font-semibold transition-colors hover:bg-ink hover:text-cream"
+              >
+                WhatsApp
+              </a>
+            </Magnetic>
             {cvUrl && (
               <a
                 href={cvUrl}

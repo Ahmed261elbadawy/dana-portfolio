@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Magnetic } from "@/components/magnetic";
 
 const NAV_LINKS = [
   { href: "/#work", label: "Work" },
@@ -91,12 +92,14 @@ export function SiteHeader() {
           </nav>
 
           <div className="col-start-3 flex justify-end">
-            <Link
-              href="/#contact"
-              className="rounded-pill bg-cream px-5 py-2.5 text-sm font-semibold text-burgundy shadow-sm transition-transform hover:scale-[1.03]"
-            >
-              Let&apos;s talk ↗
-            </Link>
+            <Magnetic>
+              <Link
+                href="/#contact"
+                className="rounded-pill bg-cream px-5 py-2.5 text-sm font-semibold text-burgundy shadow-sm transition-transform hover:scale-[1.03]"
+              >
+                Let&apos;s talk ↗
+              </Link>
+            </Magnetic>
           </div>
         </div>
 
