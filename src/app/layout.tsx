@@ -30,6 +30,15 @@ export const metadata: Metadata = {
   title: "Dana Badawy | Content Strategy & Creation",
   description:
     "Content, brand strategy, social media marketing, for food and lifestyle brands, from the raw idea to execution.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Dana Badawy",
+  },
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

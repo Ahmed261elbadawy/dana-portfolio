@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/admin/actions";
+import { InstallAppButton } from "@/components/admin/install-app-button";
 
 const navItems = [
   { href: "/admin", label: "Overview" },
@@ -40,6 +41,7 @@ export default async function DashboardLayout({
         </nav>
 
         <div className="mt-auto space-y-2 pt-4 lg:pt-0">
+          <InstallAppButton />
           <p className="truncate text-xs text-ink/50">{user?.email}</p>
           <form action={signOut}>
             <button
