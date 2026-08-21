@@ -9,6 +9,7 @@ import { Reveal } from "@/components/reveal";
 import { BoldText } from "@/components/bold-text";
 import { Magnetic } from "@/components/magnetic";
 import { TiltCard } from "@/components/tilt-card";
+import { Parallax } from "@/components/parallax";
 import {
   FALLBACK_EMAIL,
   FALLBACK_INTRO,
@@ -64,7 +65,10 @@ export default async function Home() {
       >
         <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <div className="space-y-7">
-            <span className="flex flex-wrap items-center gap-x-1.5 text-xs font-semibold uppercase tracking-wide text-cream/60 sm:inline-flex sm:rounded-pill sm:bg-cream sm:px-4 sm:py-2 sm:text-burgundy sm:shadow-sm">
+            <span
+              className="animate-rise-in flex flex-wrap items-center gap-x-1.5 text-xs font-semibold uppercase tracking-wide text-cream/60 sm:inline-flex sm:rounded-pill sm:bg-cream sm:px-4 sm:py-2 sm:text-burgundy sm:shadow-sm"
+              style={{ animationDelay: "0ms" }}
+            >
               {FALLBACK_ROLE_PARTS.map((part, i) => (
                 <span key={part} className="whitespace-nowrap">
                   {i > 0 && <span className="mr-1.5">·</span>}
@@ -73,11 +77,17 @@ export default async function Home() {
               ))}
             </span>
 
-            <h1 className="whitespace-nowrap font-display text-4xl italic leading-[0.9] sm:text-6xl lg:text-7xl xl:text-8xl">
+            <h1
+              className="animate-rise-in whitespace-nowrap font-display text-4xl italic leading-[0.9] sm:text-6xl lg:text-7xl xl:text-8xl"
+              style={{ animationDelay: "90ms" }}
+            >
               Dana Badawy
             </h1>
 
-            <div className="max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl">
+            <div
+              className="animate-rise-in max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl"
+              style={{ animationDelay: "180ms" }}
+            >
               {intro
                 .split("\n\n")
                 .filter(Boolean)
@@ -88,17 +98,24 @@ export default async function Home() {
                 ))}
             </div>
 
-            <AnimatedStats stats={FALLBACK_STATS} />
+            <div className="animate-rise-in" style={{ animationDelay: "280ms" }}>
+              <AnimatedStats stats={FALLBACK_STATS} />
+            </div>
           </div>
 
-          <TiltCard className="mx-auto w-full max-w-[280px] lg:max-w-none">
-            <Polaroid
-              photoUrl={photoUrl}
-              name="Dana Badawy"
-              caption="Let's talk ↓"
-              captionHref="#contact"
-            />
-          </TiltCard>
+          <Parallax strength={0.06} className="mx-auto w-full max-w-[280px] lg:max-w-none">
+            <TiltCard
+              className="animate-rise-in"
+              style={{ animationDelay: "220ms" }}
+            >
+              <Polaroid
+                photoUrl={photoUrl}
+                name="Dana Badawy"
+                caption="Let's talk ↓"
+                captionHref="#contact"
+              />
+            </TiltCard>
+          </Parallax>
         </div>
       </section>
 

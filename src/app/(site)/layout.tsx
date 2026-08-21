@@ -1,6 +1,7 @@
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsappButton } from "@/components/whatsapp-button";
+import { CustomCursor } from "@/components/custom-cursor";
 import { createClient } from "@/lib/supabase/server";
 import { FALLBACK_WHATSAPP } from "@/lib/content";
 
@@ -25,6 +26,7 @@ export default async function SiteLayout({
         whatsapp={settings?.whatsapp ?? undefined}
       />
       <WhatsappButton whatsapp={settings?.whatsapp || FALLBACK_WHATSAPP} />
+      <CustomCursor />
     </div>
   );
 }
