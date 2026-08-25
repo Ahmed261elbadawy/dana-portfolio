@@ -18,6 +18,12 @@ export async function updateSiteSettings(
     .filter(Boolean);
   const email = String(formData.get("email") ?? "").trim();
   const whatsapp = String(formData.get("whatsapp") ?? "").trim();
+  const education_badge =
+    String(formData.get("education_badge") ?? "").trim() || null;
+  const credential_lines = String(formData.get("credential_lines") ?? "")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
   const cvFile = formData.get("cv") as File | null;
   const photoFile = formData.get("photo") as File | null;
 
@@ -27,6 +33,8 @@ export async function updateSiteSettings(
     services,
     email,
     whatsapp,
+    education_badge,
+    credential_lines,
   };
 
   if (cvFile && cvFile.size > 0) {

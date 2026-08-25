@@ -90,6 +90,50 @@ export function SettingsForm({ settings }: { settings?: SiteSettings }) {
       </div>
 
       <div className="space-y-1.5">
+        <label
+          htmlFor="education_badge"
+          className="text-sm font-medium text-ink/80"
+        >
+          Education highlight (optional)
+        </label>
+        <p className="text-xs text-ink/50">
+          Shown as a filled badge under the skills grid, e.g. a degree and
+          university.
+        </p>
+        <input
+          id="education_badge"
+          name="education_badge"
+          type="text"
+          placeholder="BS International Business — Northeastern University"
+          defaultValue={settings?.education_badge ?? ""}
+          className="w-full rounded-md border border-ink/15 px-3.5 py-3 text-base outline-none focus:border-burgundy"
+        />
+      </div>
+
+      <div className="space-y-1.5">
+        <label
+          htmlFor="credential_lines"
+          className="text-sm font-medium text-ink/80"
+        >
+          Certification credentials (optional, one per line)
+        </label>
+        <p className="text-xs text-ink/50">
+          Shown as a short list under the education highlight, e.g. one
+          certification per line.
+        </p>
+        <textarea
+          id="credential_lines"
+          name="credential_lines"
+          rows={4}
+          placeholder={
+            "Digital Marketing Certification by HubSpot\nContent Marketing Certification by Semrush"
+          }
+          defaultValue={settings?.credential_lines?.join("\n")}
+          className="w-full rounded-md border border-ink/15 px-3.5 py-3 text-base outline-none focus:border-burgundy"
+        />
+      </div>
+
+      <div className="space-y-1.5">
         <label htmlFor="email" className="text-sm font-medium text-ink/80">
           Contact email
         </label>

@@ -17,6 +17,8 @@ export type SiteSettings = {
   whatsapp: string;
   cv_url: string | null;
   photo_url: string | null;
+  education_badge: string | null;
+  credential_lines: string[];
   updated_at: string;
 };
 

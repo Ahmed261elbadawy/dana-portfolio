@@ -4,9 +4,13 @@ import type { Certificate, Skill } from "@/lib/types/database";
 export function SkillsCertifications({
   skills,
   certificates,
+  educationBadge,
+  credentialLines,
 }: {
   skills: Skill[];
   certificates: Certificate[];
+  educationBadge: string | null;
+  credentialLines: string[];
 }) {
   return (
     <section
@@ -14,17 +18,8 @@ export function SkillsCertifications({
       className="bg-pink px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
     >
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* Left: heading + skills grid */}
-        <div className="space-y-8">
-          <div className="space-y-1">
-            <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
-              How I work
-            </p>
-            <h2 className="font-display text-display-md text-burgundy">
-              Skills &amp; <span className="italic">certificates</span>
-            </h2>
-          </div>
-
+        {/* Left: skills grid, education highlight, credential list */}
+        <div className="space-y-6">
           {skills.length > 0 && (
             <div className="grid grid-cols-4 gap-3 sm:gap-4">
               {skills.map((skill) => (
@@ -45,15 +40,43 @@ export function SkillsCertifications({
               ))}
             </div>
           )}
+
+          {educationBadge && (
+            <div className="rounded-card bg-burgundy px-5 py-4 text-center">
+              <p className="text-sm font-semibold uppercase tracking-wide text-cream">
+                {educationBadge}
+              </p>
+            </div>
+          )}
+
+          {credentialLines.length > 0 && (
+            <ul className="space-y-2.5">
+              {credentialLines.map((line, i) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-2.5 text-sm text-ink/70"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-burgundy"
+                  />
+                  {line}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        {/* Right: caption + certificate grid */}
+        {/* Right: heading + certificate grid */}
         <div className="space-y-6">
-          <p className="max-w-md text-ink/70">
-            Trained across the tools and platforms that turn a strategy into
-            something people actually see, backed by certifications from
-            recognized programs in marketing and content.
-          </p>
+          <div className="space-y-1">
+            <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
+              How I work
+            </p>
+            <h2 className="font-display text-display-md text-burgundy">
+              Skills &amp; <span className="italic">certifications</span>
+            </h2>
+          </div>
 
           {certificates.length > 0 && (
             <div className="grid grid-cols-2 gap-4 sm:gap-5">

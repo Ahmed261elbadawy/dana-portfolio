@@ -229,6 +229,8 @@ export default async function Home() {
         <SkillsCertifications
           skills={skills ?? []}
           certificates={certificates ?? []}
+          educationBadge={settings?.education_badge ?? null}
+          credentialLines={settings?.credential_lines ?? []}
         />
       )}
 
