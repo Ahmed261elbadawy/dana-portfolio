@@ -20,17 +20,17 @@ export default async function EditProjectPage({
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
+      <div className="space-y-1">
+        <div className="flex flex-wrap items-center gap-3">
           <h1 className="font-display text-display-md">Edit project</h1>
-          <p className="mt-1 text-ink/60">{project.name}</p>
+          <Link
+            href={`/admin/projects/${project.id}/case-study`}
+            className="shrink-0 rounded-pill border border-ink/15 px-5 py-2.5 text-sm font-semibold"
+          >
+            Edit case study ↗
+          </Link>
         </div>
-        <Link
-          href={`/admin/projects/${project.id}/case-study`}
-          className="rounded-pill border border-ink/15 px-5 py-2.5 text-sm font-semibold"
-        >
-          Edit case study ↗
-        </Link>
+        <p className="text-ink/60">{project.name}</p>
       </div>
       <ProjectForm project={project} />
     </div>

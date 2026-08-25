@@ -140,26 +140,43 @@ export default async function AdminHomePage() {
         </div>
 
         <div className="rounded-card bg-paper p-5">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-ink/50">
+          <p className="mb-5 text-sm font-semibold uppercase tracking-wide text-ink/50">
             Visitors per day (last 14 days)
           </p>
-          <div className="flex h-32 items-end gap-1.5">
-            {last14.map((d) => (
-              <div
-                key={d.day}
-                className="flex flex-1 flex-col items-center gap-1"
-              >
+          <div className="flex items-end gap-2" style={{ height: 170 }}>
+            {last14.map((d) => {
+              const barHeight = Math.round(
+                (d.visitors / maxDayVisitors) * 130,
+              );
+              return (
                 <div
-                  className="w-full rounded-t-sm bg-burgundy"
-                  style={{
-                    height: `${(d.visitors / maxDayVisitors) * 100}%`,
-                    minHeight: d.visitors > 0 ? "4px" : "0px",
-                  }}
-                />
-                <span className="text-[10px] text-ink/40">
-                  {d.day.slice(5)}
-                </span>
-              </div>
+                  key={d.day}
+                  className="flex h-full flex-1 flex-col items-center justify-end gap-1.5"
+                  title={`${d.day}: ${d.visitors} visitor${d.visitors === 1 ? "" : "s"}`}
+                >
+                  {d.visitors > 0 && (
+                    <span className="text-[11px] font-semibold tabular-nums text-burgundy">
+                      {d.visitors}
+                    </span>
+                  )}
+                  <div
+                    className="w-full rounded-t-md bg-burgundy transition-[height]"
+                    style={{
+                      height: Math.max(barHeight, d.visitors > 0 ? 6 : 2),
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-2 flex gap-2">
+            {last14.map((d) => (
+              <span
+                key={d.day}
+                className="flex-1 text-center text-[10px] text-ink/40"
+              >
+                {d.day.slice(5)}
+              </span>
             ))}
           </div>
         </div>
