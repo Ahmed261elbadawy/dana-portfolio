@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { WorkGrid } from "@/components/home/work-grid";
 import { MarqueeBand } from "@/components/home/marquee-band";
 import { TrustedStrip } from "@/components/home/trusted-strip";
+import { SkillsCertifications } from "@/components/home/skills-certifications";
 import { Polaroid } from "@/components/home/polaroid";
 import { AnimatedStats } from "@/components/home/animated-stats";
 import { Reveal } from "@/components/reveal";
@@ -37,6 +38,8 @@ export default async function Home() {
     { data: testimonials },
     { data: settingsRows },
     { data: brandLogos },
+    { data: skills },
+    { data: certificates },
   ] = await Promise.all([
     supabase
       .from("brands")
@@ -51,6 +54,16 @@ export default async function Home() {
     supabase.from("site_settings").select("*").limit(1),
     supabase
       .from("brand_logos")
+      .select("*")
+      .eq("published", true)
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("skills")
+      .select("*")
+      .eq("published", true)
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("certificates")
       .select("*")
       .eq("published", true)
       .order("sort_order", { ascending: true }),
@@ -210,6 +223,14 @@ export default async function Home() {
           )}
         </div>
       </section>
+
+      {((skills && skills.length > 0) ||
+        (certificates && certificates.length > 0)) && (
+        <SkillsCertifications
+          skills={skills ?? []}
+          certificates={certificates ?? []}
+        />
+      )}
 
       {/* Feedback */}
       {testimonials && testimonials.length > 0 && (

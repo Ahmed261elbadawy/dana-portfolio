@@ -114,6 +114,25 @@ export type BrandLogo = {
   created_at: string;
 };
 
+export type Skill = {
+  id: string;
+  name: string;
+  icon_url: string;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+};
+
+export type Certificate = {
+  id: string;
+  title: string;
+  issuer: string | null;
+  image_url: string;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -169,6 +188,18 @@ export interface Database {
         Row: BrandLogo;
         Insert: Partial<BrandLogo>;
         Update: Partial<BrandLogo>;
+        Relationships: [];
+      };
+      skills: {
+        Row: Skill;
+        Insert: Partial<Skill>;
+        Update: Partial<Skill>;
+        Relationships: [];
+      };
+      certificates: {
+        Row: Certificate;
+        Insert: Partial<Certificate>;
+        Update: Partial<Certificate>;
         Relationships: [];
       };
     };
