@@ -14,14 +14,14 @@ export function TrustedStrip({ logos }: { logos: BrandLogo[] }) {
 
         <div className="flex flex-wrap items-center justify-center">
           {logos.map((logo, i) => (
-            <span key={logo.id} className="relative px-4 sm:px-5">
+            <span key={logo.id} className="relative px-5 sm:px-7">
               <Image
                 src={logo.logo_url}
                 alt={logo.name}
-                width={100}
-                height={32}
+                width={160}
+                height={56}
                 unoptimized
-                className="h-6 w-auto max-w-[100px] object-contain opacity-70 grayscale transition-opacity hover:opacity-100 sm:h-7"
+                className="h-11 w-auto max-w-[160px] object-contain opacity-70 grayscale transition-opacity hover:opacity-100 sm:h-14 sm:max-w-[200px]"
               />
               {i < logos.length - 1 && (
                 <span
