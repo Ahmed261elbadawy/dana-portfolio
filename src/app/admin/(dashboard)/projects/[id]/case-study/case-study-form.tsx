@@ -42,7 +42,7 @@ export function CaseStudyForm({
         placeholder="Strategy and creative direction decisions."
       />
       <TextArea
-        label="Art direction"
+        label="Creative direction"
         name="art_direction"
         defaultValue={caseStudy?.art_direction}
         placeholder="Imagery, stills, video direction notes."

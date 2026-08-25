@@ -1,7 +1,7 @@
 const WORDS = [
   "Content Creation",
   "Brand Strategy",
-  "Art Direction",
+  "Creative Direction",
   "Social Media",
   "Campaigns",
 ];

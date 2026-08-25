@@ -9,7 +9,7 @@ const SERVICE_OPTIONS = [
   { value: "campaign", label: "Campaign" },
   { value: "strategy", label: "Strategy" },
   { value: "content_creation", label: "Content creation" },
-  { value: "art_direction", label: "Art direction" },
+  { value: "art_direction", label: "Creative direction" },
   { value: "social_media_management", label: "Social media management" },
 ] as const;
 

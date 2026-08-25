@@ -29,7 +29,7 @@ export const SERVICE_LABELS: Record<string, string> = {
   campaign: "Campaign",
   strategy: "Strategy",
   content_creation: "Content creation",
-  art_direction: "Art direction",
+  art_direction: "Creative direction",
   social_media_management: "Social media management",
 };
 
@@ -50,7 +50,7 @@ export const FALLBACK_SERVICES = [
       "Day-to-day ownership of the feed, planning, posting, and reading what's working.",
   },
   {
-    title: "Art direction",
+    title: "Creative direction",
     description:
       "Visual direction for shoots and campaigns, keeping every asset on-brand from mood board to delivery.",
   },

@@ -117,7 +117,7 @@ export default async function CaseStudyPage({
               <Section title="The approach" body={caseStudy.approach} />
             )}
             {caseStudy.art_direction && (
-              <Section title="Art direction" body={caseStudy.art_direction} />
+              <Section title="Creative direction" body={caseStudy.art_direction} />
             )}
 
             {media && media.length > 0 && (
