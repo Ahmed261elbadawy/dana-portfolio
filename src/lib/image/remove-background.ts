@@ -10,6 +10,21 @@ function colorDist(
   return Math.hypot(data[idx] - r, data[idx + 1] - g, data[idx + 2] - b);
 }
 
+// Never throws - background removal is a nice-to-have, not something that
+// should ever crash an upload. Any failure (unsupported format, a tricky
+// SVG, an unexpected color space) falls back to the original file, with
+// `processed: false` so the caller can keep the original extension/type.
+export async function safeRemoveSolidBackground(
+  input: Buffer,
+): Promise<{ buffer: Buffer; processed: boolean }> {
+  try {
+    return { buffer: await removeSolidBackground(input), processed: true };
+  } catch (err) {
+    console.error("removeSolidBackground failed, uploading original", err);
+    return { buffer: input, processed: false };
+  }
+}
+
 // Keys out a flat background color, estimated from the full border
 // perimeter (not just corner pixels, which are too easily thrown off by
 // compression noise or antialiasing). The key is applied globally rather
@@ -19,12 +34,13 @@ function colorDist(
 // busy edge-to-edge art), the image is returned untouched.
 export async function removeSolidBackground(input: Buffer): Promise<Buffer> {
   const { data, info } = await sharp(input)
+    .toColourspace("srgb")
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
 
   const { width, height, channels } = info;
-  if (width < 3 || height < 3) return input;
+  if (width < 3 || height < 3 || channels < 4) return input;
 
   const borderIdx: number[] = [];
   for (let x = 0; x < width; x++) {

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { Skill } from "@/lib/types/database";
-import { removeSolidBackground } from "@/lib/image/remove-background";
+import { safeRemoveSolidBackground } from "@/lib/image/remove-background";
 
 export async function upsertSkill(
   _prevState: { error: string } | null,
@@ -21,12 +21,15 @@ export async function upsertSkill(
 
   let iconUrl: string | undefined;
   if (iconFile && iconFile.size > 0) {
-    const path = `skill-${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}.png`;
     const original = Buffer.from(await iconFile.arrayBuffer());
-    const processed = await removeSolidBackground(original);
+    const { buffer, processed } = await safeRemoveSolidBackground(original);
+    const ext = processed ? "png" : (iconFile.name.split(".").pop() ?? "png");
+    const contentType = processed ? "image/png" : iconFile.type || "image/png";
+    const path = `skill-${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}.${ext}`;
+
     const { error: uploadError } = await supabase.storage
       .from("logos")
-      .upload(path, processed, { upsert: true, contentType: "image/png" });
+      .upload(path, buffer, { upsert: true, contentType });
     if (uploadError) return { error: `Icon upload failed: ${uploadError.message}` };
     const { data } = supabase.storage.from("logos").getPublicUrl(path);
     iconUrl = data.publicUrl;
