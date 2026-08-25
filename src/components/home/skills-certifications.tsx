@@ -6,10 +6,10 @@ function CertBadgeIcon() {
     <svg
       aria-hidden="true"
       viewBox="0 0 24 24"
-      className="h-4 w-4 shrink-0 text-burgundy"
+      className="h-6 w-6 shrink-0 text-burgundy"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.8"
+      strokeWidth="1.6"
     >
       <circle cx="12" cy="8" r="5" />
       <path
@@ -33,31 +33,29 @@ export function SkillsCertifications({
   return (
     <section
       data-nav-theme="light"
-      className="bg-pink px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
+      className="bg-yellow px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
     >
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* Left: framed skills card + certificate name list */}
-        <div className="space-y-5">
+        {/* Left: skills grid + certificate name list, no frame */}
+        <div className="space-y-8">
           {skills.length > 0 && (
-            <div className="rounded-card-lg bg-paper p-5 shadow-sm sm:p-6">
-              <div className="grid grid-cols-4 gap-3 sm:gap-4">
-                {skills.map((skill) => (
-                  <div
-                    key={skill.id}
-                    title={skill.name}
-                    className="flex aspect-square items-center justify-center rounded-xl bg-cream p-2.5 transition-transform hover:-translate-y-0.5 sm:p-3"
-                  >
-                    <Image
-                      src={skill.icon_url}
-                      alt={skill.name}
-                      width={36}
-                      height={36}
-                      unoptimized
-                      className="max-h-full max-w-full object-contain"
-                    />
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-4 gap-3 sm:gap-4">
+              {skills.map((skill) => (
+                <div
+                  key={skill.id}
+                  title={skill.name}
+                  className="flex aspect-square items-center justify-center rounded-xl bg-paper p-2.5 shadow-sm transition-transform hover:-translate-y-0.5 sm:p-3"
+                >
+                  <Image
+                    src={skill.icon_url}
+                    alt={skill.name}
+                    width={36}
+                    height={36}
+                    unoptimized
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
             </div>
           )}
 
@@ -70,19 +68,17 @@ export function SkillsCertifications({
           )}
 
           {certificates.length > 0 && (
-            <div className="rounded-card-lg bg-paper p-5 shadow-sm sm:p-6">
-              <ul className="space-y-3.5">
-                {certificates.map((cert) => (
-                  <li
-                    key={cert.id}
-                    className="flex items-center gap-3 text-sm text-ink/70"
-                  >
-                    <CertBadgeIcon />
-                    <span className="truncate">{cert.title}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ul className="space-y-4">
+              {certificates.map((cert) => (
+                <li
+                  key={cert.id}
+                  className="flex items-center gap-3.5 text-base text-ink/75"
+                >
+                  <CertBadgeIcon />
+                  <span className="truncate">{cert.title}</span>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
 
