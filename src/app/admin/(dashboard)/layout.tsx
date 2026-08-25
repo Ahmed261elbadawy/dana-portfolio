@@ -7,6 +7,7 @@ const navItems = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/projects", label: "Projects" },
   { href: "/admin/testimonials", label: "Testimonials" },
+  { href: "/admin/brand-logos", label: "Brand logos" },
   { href: "/admin/settings", label: "Site settings" },
 ];
 

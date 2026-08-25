@@ -104,6 +104,16 @@ export type PageView = {
   created_at: string;
 };
 
+export type BrandLogo = {
+  id: string;
+  name: string;
+  logo_url: string;
+  category: string | null;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -153,6 +163,12 @@ export interface Database {
         Row: PageView;
         Insert: Partial<PageView>;
         Update: Partial<PageView>;
+        Relationships: [];
+      };
+      brand_logos: {
+        Row: BrandLogo;
+        Insert: Partial<BrandLogo>;
+        Update: Partial<BrandLogo>;
         Relationships: [];
       };
     };

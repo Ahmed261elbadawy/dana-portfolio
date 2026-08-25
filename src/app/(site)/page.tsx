@@ -32,20 +32,29 @@ const SERVICE_BLOCKS = [
 export default async function Home() {
   const supabase = await createClient();
 
-  const [{ data: projects }, { data: testimonials }, { data: settingsRows }] =
-    await Promise.all([
-      supabase
-        .from("brands")
-        .select("*")
-        .eq("published", true)
-        .order("sort_order", { ascending: true }),
-      supabase
-        .from("testimonials")
-        .select("*")
-        .eq("published", true)
-        .order("sort_order", { ascending: true }),
-      supabase.from("site_settings").select("*").limit(1),
-    ]);
+  const [
+    { data: projects },
+    { data: testimonials },
+    { data: settingsRows },
+    { data: brandLogos },
+  ] = await Promise.all([
+    supabase
+      .from("brands")
+      .select("*")
+      .eq("published", true)
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("testimonials")
+      .select("*")
+      .eq("published", true)
+      .order("sort_order", { ascending: true }),
+    supabase.from("site_settings").select("*").limit(1),
+    supabase
+      .from("brand_logos")
+      .select("*")
+      .eq("published", true)
+      .order("sort_order", { ascending: true }),
+  ]);
 
   const settings = settingsRows?.[0];
   const intro = settings?.intro_paragraph?.trim() || FALLBACK_INTRO;
@@ -124,7 +133,9 @@ export default async function Home() {
       </section>
 
       <MarqueeBand />
-      <TrustedStrip />
+      {brandLogos && brandLogos.length > 0 && (
+        <TrustedStrip logos={brandLogos} />
+      )}
 
       {/* Services: what I actually do */}
       <section
