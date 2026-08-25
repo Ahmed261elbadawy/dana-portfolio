@@ -2,7 +2,7 @@
 // page is built and Dana has entered her own values in Supabase.
 
 export const FALLBACK_INTRO =
-  "Content, brand strategy, social media marketing, for food and lifestyle brands, from the raw idea to execution.\n\nStarted early, straight into real brands and real work. **2+ years of hands-on experience** from the first idea to the final frame, where strategy meets production, and actually makes it to the screen.\n\nAnd if you're wondering how that's 2+ years and I just graduated, well, I'm already a **Senior Content Creator**. Let's just say I've been a bit of a workaholic from a young age.";
+  "**Content, brand strategy, social media marketing, for food and lifestyle brands, from the raw idea to execution.**\n\nStarted early, straight into real brands and real work. **2+ years of hands-on experience** from the first idea to the final frame, where strategy meets production, and actually makes it to the screen.\n\nAnd if you're wondering how that's 2+ years and I just graduated, well, I'm already a **Senior Content Creator**. Let's just say I've been a bit of a workaholic from a young age.";
 
 export const FALLBACK_BIO =
   "I got into this early, no slow ramp-up, straight into real brands with real budgets and real deadlines. Since then it's been food and lifestyle brands, mostly: the kind of work where a campaign lives or dies on whether the content actually stops the scroll. I handle it end to end, strategy, art direction, the shoot, the edit, the post, because I've found the work is stronger when one person is holding the whole idea, not handing it off in pieces. Still early in my career on paper. Not in practice.";
