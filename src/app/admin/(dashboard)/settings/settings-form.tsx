@@ -111,29 +111,6 @@ export function SettingsForm({ settings }: { settings?: SiteSettings }) {
       </div>
 
       <div className="space-y-1.5">
-        <label
-          htmlFor="credential_lines"
-          className="text-sm font-medium text-ink/80"
-        >
-          Certification credentials (optional, one per line)
-        </label>
-        <p className="text-xs text-ink/50">
-          Shown as a short list under the education highlight, e.g. one
-          certification per line.
-        </p>
-        <textarea
-          id="credential_lines"
-          name="credential_lines"
-          rows={4}
-          placeholder={
-            "Digital Marketing Certification by HubSpot\nContent Marketing Certification by Semrush"
-          }
-          defaultValue={settings?.credential_lines?.join("\n")}
-          className="w-full rounded-md border border-ink/15 px-3.5 py-3 text-base outline-none focus:border-burgundy"
-        />
-      </div>
-
-      <div className="space-y-1.5">
         <label htmlFor="email" className="text-sm font-medium text-ink/80">
           Contact email
         </label>
