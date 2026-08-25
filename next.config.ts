@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // sharp ships native per-platform binaries; bundling it (the default for
+  // packages used in Server Actions/Route Handlers) breaks at runtime on
+  // Vercel. Keeping it external lets Node's normal require() resolve the
+  // correct binary from node_modules instead.
+  serverExternalPackages: ["sharp"],
   turbopack: {
     root: __dirname,
   },
