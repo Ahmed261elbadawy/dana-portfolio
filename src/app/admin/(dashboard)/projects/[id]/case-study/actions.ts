@@ -25,15 +25,18 @@ export async function upsertCaseStudy(
   const heroFile = formData.get("hero_media") as File | null;
 
   let heroUrl: string | undefined;
+  let heroIsVideo = false;
   if (heroFile && heroFile.size > 0) {
-    const ext = heroFile.name.split(".").pop() ?? "jpg";
+    heroIsVideo = heroFile.type.startsWith("video/");
+    const bucket = heroIsVideo ? "videos" : "images";
+    const ext = heroFile.name.split(".").pop() ?? (heroIsVideo ? "mp4" : "jpg");
     const path = `${brandId}-hero-${Date.now()}.${ext}`;
     const { error: uploadError } = await supabase.storage
-      .from("images")
+      .from(bucket)
       .upload(path, heroFile, { upsert: true });
     if (uploadError)
-      return { error: `Hero image upload failed: ${uploadError.message}` };
-    const { data } = supabase.storage.from("images").getPublicUrl(path);
+      return { error: `Hero media upload failed: ${uploadError.message}` };
+    const { data } = supabase.storage.from(bucket).getPublicUrl(path);
     heroUrl = data.publicUrl;
   }
 
@@ -48,7 +51,7 @@ export async function upsertCaseStudy(
   };
   if (heroUrl) {
     payload.hero_media_url = heroUrl;
-    payload.hero_media_kind = "image";
+    payload.hero_media_kind = heroIsVideo ? "upload_video" : "image";
   }
 
   if (caseStudyId) {

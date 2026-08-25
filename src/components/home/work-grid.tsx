@@ -8,6 +8,11 @@ import { SERVICE_LABELS } from "@/lib/content";
 import { TiltCard } from "@/components/tilt-card";
 
 const TILTS = ["-2deg", "1.5deg", "-1deg", "2deg", "-1.5deg"];
+const VIDEO_EXT = /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i;
+
+function isVideoUrl(url: string) {
+  return VIDEO_EXT.test(url);
+}
 
 export function WorkGrid({ projects }: { projects: Brand[] }) {
   const [filter, setFilter] = useState<string | null>(null);
@@ -67,13 +72,25 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
               >
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-pink">
                   {project.cover_image_url ? (
-                    <Image
-                      src={project.cover_image_url}
-                      alt={`${project.name}, ${project.industry || "project"} cover`}
-                      fill
-                      sizes="(min-width: 640px) 288px, 52vw"
-                      className="object-cover"
-                    />
+                    isVideoUrl(project.cover_image_url) ? (
+                      <video
+                        src={project.cover_image_url}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                      />
+                    ) : (
+                      <Image
+                        src={project.cover_image_url}
+                        alt={`${project.name}, ${project.industry || "project"} cover`}
+                        fill
+                        sizes="(min-width: 640px) 288px, 52vw"
+                        className="object-cover"
+                      />
+                    )
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
                       <span className="font-display text-6xl text-ink/15">

@@ -21,6 +21,9 @@ export function ProjectForm({ project }: { project?: Project }) {
   const [coverPreview, setCoverPreview] = useState<string | null>(
     project?.cover_image_url ?? null,
   );
+  const [isCoverVideo, setIsCoverVideo] = useState(
+    /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i.test(project?.cover_image_url ?? ""),
+  );
 
   return (
     <form action={formAction} className="max-w-xl space-y-6">
@@ -96,30 +99,45 @@ export function ProjectForm({ project }: { project?: Project }) {
 
       <div className="space-y-1.5">
         <label htmlFor="cover" className="text-sm font-medium text-ink/80">
-          Cover photo
+          Cover photo or video
         </label>
         <p className="text-xs text-ink/50">
-          The big image on the work card and case study, a real photo or
-          still from the project, not the logo.
+          The big media on the work card and case study, a real photo or
+          video from the project, not the logo. A video plays muted and on
+          loop automatically on the homepage grid.
         </p>
         {coverPreview && (
           <div className="mb-2 aspect-[4/3] w-full max-w-xs overflow-hidden rounded-card border border-ink/10 bg-paper">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={coverPreview}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            {isCoverVideo ? (
+              <video
+                src={coverPreview}
+                className="h-full w-full object-cover"
+                muted
+                loop
+                autoPlay
+                playsInline
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={coverPreview}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            )}
           </div>
         )}
         <input
           id="cover"
           name="cover"
           type="file"
-          accept="image/png,image/jpeg,image/webp,image/avif"
+          accept="image/png,image/jpeg,image/webp,image/avif,video/mp4,video/webm,video/quicktime"
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) setCoverPreview(URL.createObjectURL(file));
+            if (file) {
+              setIsCoverVideo(file.type.startsWith("video/"));
+              setCoverPreview(URL.createObjectURL(file));
+            }
           }}
           className="w-full text-sm"
         />

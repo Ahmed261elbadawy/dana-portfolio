@@ -15,6 +15,9 @@ export function CaseStudyForm({
   const [heroPreview, setHeroPreview] = useState<string | null>(
     caseStudy?.hero_media_url ?? null,
   );
+  const [heroIsVideo, setHeroIsVideo] = useState(
+    caseStudy?.hero_media_kind === "upload_video",
+  );
 
   return (
     <form action={formAction} className="max-w-2xl space-y-6">
@@ -66,26 +69,40 @@ export function CaseStudyForm({
 
       <div className="space-y-1.5">
         <label htmlFor="hero_media" className="text-sm font-medium text-ink/80">
-          Hero image
+          Hero image or video
         </label>
         {heroPreview && (
           <div className="mb-2 aspect-[16/9] w-full max-w-md overflow-hidden rounded-card border border-ink/10 bg-paper">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={heroPreview}
-              alt=""
-              className="h-full w-full object-cover"
-            />
+            {heroIsVideo ? (
+              <video
+                src={heroPreview}
+                className="h-full w-full object-cover"
+                muted
+                loop
+                autoPlay
+                playsInline
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={heroPreview}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            )}
           </div>
         )}
         <input
           id="hero_media"
           name="hero_media"
           type="file"
-          accept="image/png,image/jpeg,image/webp,image/avif"
+          accept="image/png,image/jpeg,image/webp,image/avif,video/mp4,video/webm,video/quicktime"
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) setHeroPreview(URL.createObjectURL(file));
+            if (file) {
+              setHeroIsVideo(file.type.startsWith("video/"));
+              setHeroPreview(URL.createObjectURL(file));
+            }
           }}
           className="w-full text-sm"
         />

@@ -99,14 +99,23 @@ export default async function CaseStudyPage({
           <>
             {caseStudy.hero_media_url && (
               <div className="relative aspect-[16/9] overflow-hidden rounded-card-lg bg-paper">
-                <Image
-                  src={caseStudy.hero_media_url}
-                  alt={`${project.name} case study hero`}
-                  fill
-                  priority
-                  sizes="(min-width: 768px) 768px, 100vw"
-                  className="object-cover"
-                />
+                {caseStudy.hero_media_kind === "upload_video" ? (
+                  <video
+                    src={caseStudy.hero_media_url}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    controls
+                    preload="metadata"
+                  />
+                ) : (
+                  <Image
+                    src={caseStudy.hero_media_url}
+                    alt={`${project.name} case study hero`}
+                    fill
+                    priority
+                    sizes="(min-width: 768px) 768px, 100vw"
+                    className="object-cover"
+                  />
+                )}
               </div>
             )}
 
@@ -142,6 +151,14 @@ export default async function CaseStudyPage({
                           {m.provider ?? "Watch"}
                         </span>
                       </a>
+                    ) : m.kind === "upload_video" ? (
+                      <video
+                        src={m.url}
+                        poster={m.poster_url ?? undefined}
+                        className="absolute inset-0 h-full w-full object-cover"
+                        controls
+                        preload="none"
+                      />
                     ) : (
                       <Image
                         src={m.poster_url ?? m.url}
