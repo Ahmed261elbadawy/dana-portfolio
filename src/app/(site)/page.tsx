@@ -92,33 +92,9 @@ export default async function Home() {
             ))}
           </span>
 
-          <Parallax
-            strength={0.06}
-            className="order-3 mx-auto w-full max-w-[280px] lg:order-1 lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:max-w-none lg:self-center"
-          >
-            <TiltCard
-              className="animate-rise-in"
-              style={{ animationDelay: "180ms" }}
-            >
-              <Polaroid
-                photoUrl={photoUrl}
-                name="Dana Badawy"
-                caption="Let's talk ↓"
-                captionHref="#contact"
-              />
-            </TiltCard>
-          </Parallax>
-
           <div
-            className="animate-rise-in order-4 lg:order-4 lg:col-start-1"
-            style={{ animationDelay: "220ms" }}
-          >
-            <AnimatedStats stats={FALLBACK_STATS} />
-          </div>
-
-          <div
-            className="animate-rise-in order-5 max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
-            style={{ animationDelay: "280ms" }}
+            className="animate-rise-in order-3 max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
+            style={{ animationDelay: "180ms" }}
           >
             {intro
               .split("\n\n")
@@ -129,6 +105,30 @@ export default async function Home() {
                 </p>
               ))}
           </div>
+
+          <div
+            className="animate-rise-in order-4 lg:order-4 lg:col-start-1"
+            style={{ animationDelay: "220ms" }}
+          >
+            <AnimatedStats stats={FALLBACK_STATS} />
+          </div>
+
+          <Parallax
+            strength={0.06}
+            className="order-5 mx-auto w-full max-w-[280px] lg:order-1 lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:max-w-none lg:self-center"
+          >
+            <TiltCard
+              className="animate-rise-in"
+              style={{ animationDelay: "280ms" }}
+            >
+              <Polaroid
+                photoUrl={photoUrl}
+                name="Dana Badawy"
+                caption="Let's talk ↓"
+                captionHref="#contact"
+              />
+            </TiltCard>
+          </Parallax>
         </div>
       </section>
 

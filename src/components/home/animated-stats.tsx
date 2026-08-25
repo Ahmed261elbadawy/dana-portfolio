@@ -101,10 +101,10 @@ function AnimatedStat({ stat, active }: { stat: Stat; active: boolean }) {
 
   return (
     <div>
-      <p className="font-display text-2xl tabular-nums text-yellow-deep">
+      <p className="font-display text-3xl tabular-nums text-yellow-deep sm:text-2xl">
         {display}
       </p>
-      <p className="text-xs uppercase tracking-wide text-cream/50">
+      <p className="text-sm uppercase tracking-wide text-cream/50 sm:text-xs">
         {stat.label}
       </p>
     </div>
@@ -115,7 +115,7 @@ export function AnimatedStats({ stats }: { stats: Stat[] }) {
   const { ref, inView } = useInView<HTMLDivElement>();
 
   return (
-    <div ref={ref} className="flex flex-wrap gap-x-8 gap-y-3 pt-4">
+    <div ref={ref} className="flex flex-wrap gap-x-10 gap-y-4 pt-4 sm:gap-x-8 sm:gap-y-3">
       {stats.map((s) => (
         <AnimatedStat key={s.label} stat={s} active={inView} />
       ))}
