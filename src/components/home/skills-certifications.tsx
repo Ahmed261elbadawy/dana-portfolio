@@ -50,16 +50,27 @@ export function SkillsCertifications({
           )}
 
           {credentialLines.length > 0 && (
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {credentialLines.map((line, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-2.5 text-sm text-ink/70"
+                  className="flex items-center gap-3 text-sm text-ink/70"
                 >
-                  <span
+                  <svg
                     aria-hidden="true"
-                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-burgundy"
-                  />
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4 shrink-0 text-burgundy"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  >
+                    <circle cx="12" cy="8" r="5" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.5 7 21l5-2.5L17 21l-2-8.5"
+                    />
+                  </svg>
                   {line}
                 </li>
               ))}
@@ -83,26 +94,14 @@ export function SkillsCertifications({
               {certificates.map((cert) => (
                 <div
                   key={cert.id}
-                  className="rounded-card-lg border border-ink/5 bg-paper p-3 shadow-sm transition-shadow hover:shadow-md"
+                  className="aspect-[4/3] w-full overflow-hidden border border-ink/10 bg-paper shadow-sm transition-shadow hover:shadow-md"
                 >
-                  <div className="aspect-[4/3] w-full overflow-hidden rounded-md bg-cream">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={cert.image_url}
-                      alt={cert.title}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <div className="mt-3 space-y-0.5 px-1 pb-1">
-                    <p className="line-clamp-2 text-sm font-semibold text-ink">
-                      {cert.title}
-                    </p>
-                    {cert.issuer && (
-                      <p className="truncate text-xs text-ink/50">
-                        {cert.issuer}
-                      </p>
-                    )}
-                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={cert.image_url}
+                    alt={cert.title}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
               ))}
             </div>
