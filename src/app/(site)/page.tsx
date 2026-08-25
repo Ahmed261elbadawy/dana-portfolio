@@ -65,19 +65,31 @@ export default async function Home() {
       >
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-x-16 lg:gap-y-7">
           <h1
-            className="animate-rise-in order-1 whitespace-nowrap font-display text-4xl italic leading-[0.9] sm:text-6xl lg:order-2 lg:col-start-1 lg:text-7xl xl:text-8xl"
+            className="animate-rise-in order-1 whitespace-nowrap text-center font-display text-4xl italic leading-[0.9] sm:text-6xl lg:order-2 lg:col-start-1 lg:text-left lg:text-7xl xl:text-8xl"
             style={{ animationDelay: "0ms" }}
           >
             Dana Badawy
           </h1>
 
+          <span
+            className="animate-rise-in order-2 flex flex-wrap items-center gap-x-1.5 text-xs font-semibold uppercase tracking-wide text-cream/60 sm:inline-flex sm:rounded-pill sm:bg-cream sm:px-4 sm:py-2 sm:text-burgundy sm:shadow-sm lg:order-1 lg:col-start-1"
+            style={{ animationDelay: "90ms" }}
+          >
+            {FALLBACK_ROLE_PARTS.map((part, i) => (
+              <span key={part} className="whitespace-nowrap">
+                {i > 0 && <span className="mr-1.5">·</span>}
+                {part}
+              </span>
+            ))}
+          </span>
+
           <Parallax
             strength={0.06}
-            className="order-2 mx-auto w-full max-w-[280px] lg:order-1 lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:max-w-none lg:self-center"
+            className="order-3 mx-auto w-full max-w-[280px] lg:order-1 lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:max-w-none lg:self-center"
           >
             <TiltCard
               className="animate-rise-in"
-              style={{ animationDelay: "90ms" }}
+              style={{ animationDelay: "180ms" }}
             >
               <Polaroid
                 photoUrl={photoUrl}
@@ -89,23 +101,11 @@ export default async function Home() {
           </Parallax>
 
           <div
-            className="animate-rise-in order-3 lg:order-4 lg:col-start-1"
-            style={{ animationDelay: "180ms" }}
+            className="animate-rise-in order-4 lg:order-4 lg:col-start-1"
+            style={{ animationDelay: "220ms" }}
           >
             <AnimatedStats stats={FALLBACK_STATS} />
           </div>
-
-          <span
-            className="animate-rise-in order-4 flex flex-wrap items-center gap-x-1.5 text-xs font-semibold uppercase tracking-wide text-cream/60 sm:inline-flex sm:rounded-pill sm:bg-cream sm:px-4 sm:py-2 sm:text-burgundy sm:shadow-sm lg:order-1 lg:col-start-1"
-            style={{ animationDelay: "220ms" }}
-          >
-            {FALLBACK_ROLE_PARTS.map((part, i) => (
-              <span key={part} className="whitespace-nowrap">
-                {i > 0 && <span className="mr-1.5">·</span>}
-                {part}
-              </span>
-            ))}
-          </span>
 
           <div
             className="animate-rise-in order-5 max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
