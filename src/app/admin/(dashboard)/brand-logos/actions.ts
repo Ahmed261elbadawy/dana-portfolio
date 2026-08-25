@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { BrandLogo } from "@/lib/types/database";
+import { removeSolidBackground } from "@/lib/image/remove-background";
 
 export async function upsertBrandLogo(
   _prevState: { error: string } | null,
@@ -21,11 +22,12 @@ export async function upsertBrandLogo(
 
   let logoUrl: string | undefined;
   if (logoFile && logoFile.size > 0) {
-    const ext = logoFile.name.split(".").pop() ?? "png";
-    const path = `brand-${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}.${ext}`;
+    const path = `brand-${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}.png`;
+    const original = Buffer.from(await logoFile.arrayBuffer());
+    const processed = await removeSolidBackground(original);
     const { error: uploadError } = await supabase.storage
       .from("logos")
-      .upload(path, logoFile, { upsert: true });
+      .upload(path, processed, { upsert: true, contentType: "image/png" });
     if (uploadError) return { error: `Logo upload failed: ${uploadError.message}` };
     const { data } = supabase.storage.from("logos").getPublicUrl(path);
     logoUrl = data.publicUrl;

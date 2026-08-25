@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { Brand, ServiceType } from "@/lib/types/database";
+import { removeSolidBackground } from "@/lib/image/remove-background";
 
 function slugify(input: string) {
   return input
@@ -35,11 +36,12 @@ export async function upsertBrand(
 
   let logoUrl: string | undefined;
   if (logoFile && logoFile.size > 0) {
-    const ext = logoFile.name.split(".").pop() ?? "png";
-    const path = `${slug}-${Date.now()}.${ext}`;
+    const path = `${slug}-${Date.now()}.png`;
+    const original = Buffer.from(await logoFile.arrayBuffer());
+    const processed = await removeSolidBackground(original);
     const { error: uploadError } = await supabase.storage
       .from("logos")
-      .upload(path, logoFile, { upsert: true });
+      .upload(path, processed, { upsert: true, contentType: "image/png" });
     if (uploadError) return { error: `Logo upload failed: ${uploadError.message}` };
     const { data } = supabase.storage.from("logos").getPublicUrl(path);
     logoUrl = data.publicUrl;
