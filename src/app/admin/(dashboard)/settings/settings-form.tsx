@@ -104,7 +104,7 @@ export function SettingsForm({ settings }: { settings?: SiteSettings }) {
           id="education_badge"
           name="education_badge"
           type="text"
-          placeholder="BS International Business — Northeastern University"
+          placeholder="BS International Business, Northeastern University"
           defaultValue={settings?.education_badge ?? ""}
           className="w-full rounded-md border border-ink/15 px-3.5 py-3 text-base outline-none focus:border-burgundy"
         />

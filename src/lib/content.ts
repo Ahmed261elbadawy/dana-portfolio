@@ -52,7 +52,7 @@ export const FALLBACK_SERVICES = [
   {
     title: "Creative direction",
     description:
-      "Visual direction for shoots and campaigns, keeping every asset on-brand from mood board to delivery.",
+      "Creative direction is the process of shaping the overall creative vision of a brand, campaign, or project, from the concept and visual identity to the tone, styling, and execution.",
   },
   {
     title: "Campaign strategy",

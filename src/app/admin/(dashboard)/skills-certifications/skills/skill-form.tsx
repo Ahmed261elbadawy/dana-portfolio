@@ -32,10 +32,10 @@ export function SkillForm({ skill }: { skill?: Skill }) {
 
       <div className="space-y-1.5">
         <label htmlFor="icon" className="text-sm font-medium text-ink/80">
-          Icon{skill ? " (optional — leave blank to keep current)" : ""}
+          Icon{skill ? " (optional, leave blank to keep current)" : ""}
         </label>
         <p className="text-xs text-ink/50">
-          A square logo/icon works best — background is removed
+          A square logo/icon works best, background is removed
           automatically.
         </p>
         {iconPreview && (
@@ -74,7 +74,7 @@ export function SkillForm({ skill }: { skill?: Skill }) {
       </label>
       <p className="-mt-4 text-xs text-ink/50">
         Uncheck this if the icon has a badge/circle design and removal cuts
-        into the artwork — the file uploads exactly as-is instead.
+        into the artwork, the file uploads exactly as-is instead.
       </p>
 
       <label className="flex items-center gap-2 text-sm font-medium text-ink/80">

@@ -189,7 +189,7 @@ export function ProjectForm({
               }}
               className="w-full rounded-md border border-ink/15 px-3.5 py-3 text-base outline-none focus:border-burgundy"
             >
-              <option value="">— Upload a new logo instead —</option>
+              <option value="">Upload a new logo instead</option>
               {brandLogos.map((b) => (
                 <option key={b.id} value={b.logo_url}>
                   {b.name}
@@ -230,7 +230,7 @@ export function ProjectForm({
         </label>
         <p className="text-xs text-ink/50">
           Uncheck this if the logo has a badge/circle design and removal
-          cuts into the artwork — the file uploads exactly as-is instead.
+          cuts into the artwork, the file uploads exactly as-is instead.
         </p>
       </div>
 

@@ -50,10 +50,10 @@ export function BrandLogoForm({ brandLogo }: { brandLogo?: BrandLogo }) {
 
       <div className="space-y-1.5">
         <label htmlFor="logo" className="text-sm font-medium text-ink/80">
-          Logo{brandLogo ? " (optional — leave blank to keep current)" : ""}
+          Logo{brandLogo ? " (optional, leave blank to keep current)" : ""}
         </label>
         <p className="text-xs text-ink/50">
-          A transparent PNG or SVG works best — it&apos;s shown grayscale in
+          A transparent PNG or SVG works best, it&apos;s shown grayscale in
           a uniform grid.
         </p>
         {logoPreview && (
@@ -92,7 +92,7 @@ export function BrandLogoForm({ brandLogo }: { brandLogo?: BrandLogo }) {
       </label>
       <p className="-mt-4 text-xs text-ink/50">
         Uncheck this if the logo has a badge/circle design and removal cuts
-        into the artwork — the file uploads exactly as-is instead.
+        into the artwork, the file uploads exactly as-is instead.
       </p>
 
       <label className="flex items-center gap-2 text-sm font-medium text-ink/80">

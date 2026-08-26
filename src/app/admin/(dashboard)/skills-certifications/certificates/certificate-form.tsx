@@ -46,11 +46,11 @@ export function CertificateForm({ certificate }: { certificate?: Certificate }) 
       <div className="space-y-1.5">
         <label htmlFor="image" className="text-sm font-medium text-ink/80">
           Certificate image
-          {certificate ? " (optional — leave blank to keep current)" : ""}
+          {certificate ? " (optional, leave blank to keep current)" : ""}
         </label>
         <p className="text-xs text-ink/50">
           A photo or scan of the certificate, shown as-is (no background
-          removal — this one keeps its real image).
+          removal, this one keeps its real image).
         </p>
         {imagePreview && (
           <div className="mb-2 aspect-[4/3] w-40 overflow-hidden rounded-card border border-ink/10 bg-paper">
