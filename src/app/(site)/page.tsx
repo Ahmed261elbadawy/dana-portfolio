@@ -7,6 +7,7 @@ import { TrustedStrip } from "@/components/home/trusted-strip";
 import { SkillsCertifications } from "@/components/home/skills-certifications";
 import { Polaroid } from "@/components/home/polaroid";
 import { AnimatedStats } from "@/components/home/animated-stats";
+import { ContactBubbles } from "@/components/home/contact-bubbles";
 import { Reveal } from "@/components/reveal";
 import { BoldText } from "@/components/bold-text";
 import { Magnetic } from "@/components/magnetic";
@@ -310,9 +311,14 @@ export default async function Home() {
       <section
         id="contact"
         data-nav-theme="light"
-        className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-pink px-5 py-20 sm:px-8 sm:py-28 lg:px-16"
+        className="relative z-10 -mt-7 min-h-[38rem] scroll-mt-20 overflow-hidden rounded-t-card-lg bg-pink px-5 py-20 sm:min-h-[44rem] sm:px-8 sm:py-28 lg:px-16"
       >
-        <Reveal className="mx-auto max-w-3xl space-y-7 text-center">
+        <ContactBubbles />
+        <div
+          data-bubble-safe
+          className="relative z-10 mx-auto w-full max-w-3xl"
+        >
+        <Reveal className="space-y-7 text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
             Get in touch
           </p>
@@ -354,6 +360,7 @@ export default async function Home() {
             )}
           </div>
         </Reveal>
+        </div>
       </section>
     </>
   );
