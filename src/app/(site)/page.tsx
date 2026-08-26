@@ -138,7 +138,12 @@ export default async function Home() {
               className="animate-rise-in"
               style={{ animationDelay: "280ms" }}
             >
-              <Polaroid photoUrl={photoUrl} name="Dana Badawy" />
+              <Polaroid
+                photoUrl={photoUrl}
+                name="Dana Badawy"
+                caption="Explore my work ↓"
+                captionHref="/work"
+              />
             </TiltCard>
           </Parallax>
         </div>

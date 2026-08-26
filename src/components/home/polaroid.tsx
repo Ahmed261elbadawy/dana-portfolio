@@ -1,11 +1,16 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export function Polaroid({
   photoUrl,
   name,
+  caption,
+  captionHref,
 }: {
   photoUrl?: string | null;
   name: string;
+  caption?: string;
+  captionHref?: string;
 }) {
   return (
     <div className="relative mx-auto w-full max-w-xs -rotate-3 rounded-sm bg-cream p-3 pb-5 shadow-2xl transition-transform duration-300 hover:rotate-0 sm:max-w-sm">
@@ -35,6 +40,15 @@ export function Polaroid({
           </div>
         )}
       </div>
+
+      {caption && captionHref && (
+        <Link
+          href={captionHref}
+          className="mt-3 block text-center font-display text-lg text-ink underline decoration-2 underline-offset-4"
+        >
+          {caption}
+        </Link>
+      )}
     </div>
   );
 }
