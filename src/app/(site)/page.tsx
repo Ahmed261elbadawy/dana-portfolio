@@ -91,7 +91,7 @@ export default async function Home() {
       >
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-x-16 lg:gap-y-7">
           <h1
-            className="animate-rise-in order-1 whitespace-nowrap text-center font-display text-4xl italic leading-[0.9] sm:text-6xl lg:order-2 lg:col-start-1 lg:text-left lg:text-7xl xl:text-8xl"
+            className="animate-rise-in order-1 whitespace-nowrap text-center font-display text-5xl italic leading-[0.9] sm:text-6xl lg:order-2 lg:col-start-1 lg:text-left lg:text-7xl xl:text-8xl"
             style={{ animationDelay: "0ms" }}
           >
             Dana Badawy
