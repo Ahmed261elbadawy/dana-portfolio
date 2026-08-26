@@ -2,7 +2,7 @@
 // page is built and Dana has entered her own values in Supabase.
 
 export const FALLBACK_INTRO =
-  "Started early, straight into real brands with real budgets and real deadlines, no slow ramp-up, no watching from the sidelines.\n\n**2+ years of hands-on experience** across strategy, shoot days, and delivery, the kind where an idea has to survive contact with a client note and a deadline before it ever reaches the feed.\n\nAnd yes, that's 2+ years and I just graduated. I'm already a **Senior Content Creator**, call it a head start, or just a bit of a workaholic from a young age.";
+  "Started early, straight into **real brands** with real budgets and real deadlines. **2+ years of hands-on experience** across strategy, production, and delivery.\n\nThat's 2+ years and I just graduated. I'm already a **Senior Content Creator**, call it a head start, or just a bit of a workaholic from a young age.";
 
 export const FALLBACK_BIO =
   "I got into this early, no slow ramp-up, straight into real brands with real budgets and real deadlines. Since then it's been food and lifestyle brands, mostly: the kind of work where a campaign lives or dies on whether the content actually stops the scroll. I handle it end to end, strategy, art direction, the shoot, the edit, the post, because I've found the work is stronger when one person is holding the whole idea, not handing it off in pieces. Still early in my career on paper. Not in practice.";

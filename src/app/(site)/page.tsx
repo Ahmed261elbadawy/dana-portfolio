@@ -106,7 +106,7 @@ export default async function Home() {
           </span>
 
           <div
-            className="animate-rise-in order-4 max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
+            className="animate-rise-in order-4 max-w-2xl space-y-3 text-base text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
             style={{ animationDelay: "180ms" }}
           >
             {intro
