@@ -12,11 +12,11 @@ export function TrustedStrip({ logos }: { logos: BrandLogo[] }) {
           Brands I&apos;ve worked with
         </p>
 
-        <div className="grid grid-cols-3 gap-x-6 gap-y-8 sm:grid-cols-4 sm:gap-x-8 lg:grid-cols-5">
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-8 sm:gap-x-8">
           {logos.map((logo) => (
             <div
               key={logo.id}
-              className="flex h-12 items-center justify-center sm:h-14"
+              className="flex h-12 w-[calc(25%-1.125rem)] items-center justify-center sm:h-14 sm:w-[calc(25%-1.5rem)]"
             >
               <Image
                 src={logo.logo_url}
