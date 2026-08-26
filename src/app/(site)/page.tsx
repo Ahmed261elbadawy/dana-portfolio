@@ -22,6 +22,9 @@ import {
 
 export const revalidate = 60;
 
+// Set to true to bring the Skills & Certifications section back.
+const SHOW_SKILLS_SECTION = false;
+
 const SERVICE_BLOCKS = [
   { bg: "bg-pink", text: "text-ink" },
   { bg: "bg-yellow", text: "text-ink" },
@@ -199,7 +202,7 @@ export default async function Home() {
         className="scroll-mt-20 rounded-t-card-lg bg-burgundy py-14 text-cream sm:py-20"
       >
         <div className="mx-auto max-w-6xl space-y-8 px-5 sm:px-8 lg:px-16">
-          <Reveal>
+          <Reveal className="text-center">
             <h2 className="font-display text-display-md">Featured work</h2>
           </Reveal>
 
@@ -213,14 +216,17 @@ export default async function Home() {
         {projects?.length ? <WorkGrid projects={projects} /> : null}
       </section>
 
-      {((skills && skills.length > 0) ||
-        (certificates && certificates.length > 0)) && (
-        <SkillsCertifications
-          skills={skills ?? []}
-          certificates={certificates ?? []}
-          educationBadge={settings?.education_badge ?? null}
-        />
-      )}
+      {/* Hidden for now at Dana's request - set SHOW_SKILLS_SECTION back
+          to true once ready to show it again. */}
+      {SHOW_SKILLS_SECTION &&
+        ((skills && skills.length > 0) ||
+          (certificates && certificates.length > 0)) && (
+          <SkillsCertifications
+            skills={skills ?? []}
+            certificates={certificates ?? []}
+            educationBadge={settings?.education_badge ?? null}
+          />
+        )}
 
       {/* Feedback */}
       {testimonials && testimonials.length > 0 && (
