@@ -26,7 +26,7 @@ export function SiteFooter({
             />
             <p className="max-w-xs text-sm leading-relaxed text-cream/50">
               Content, brand strategy, and social media marketing for food
-              and lifestyle brands, from the raw idea to execution.
+              and lifestyle brands.
             </p>
           </div>
 
