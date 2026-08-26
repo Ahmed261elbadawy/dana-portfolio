@@ -1,5 +1,3 @@
-import sharp from "sharp";
-
 function colorDist(
   data: Buffer | Uint8Array,
   idx: number,
@@ -33,6 +31,7 @@ export async function safeRemoveSolidBackground(
 // clear correctly. If the border itself isn't reasonably uniform (a photo,
 // busy edge-to-edge art), the image is returned untouched.
 export async function removeSolidBackground(input: Buffer): Promise<Buffer> {
+  const { default: sharp } = await import("sharp");
   const { data, info } = await sharp(input)
     .toColourspace("srgb")
     .ensureAlpha()
