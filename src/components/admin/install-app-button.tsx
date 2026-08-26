@@ -25,10 +25,6 @@ export function InstallAppButton() {
   const [showIosHint, setShowIosHint] = useState(false);
 
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
-    }
-
     if (isStandalone()) {
       setInstalled(true);
       return;
