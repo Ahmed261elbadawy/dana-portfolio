@@ -152,7 +152,7 @@ export default async function Home() {
       <section
         id="services"
         data-nav-theme="light"
-        className="scroll-mt-20 rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
+        className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
       >
         <div className="mx-auto max-w-6xl space-y-10">
           <Reveal className="max-w-2xl space-y-3">
@@ -199,7 +199,7 @@ export default async function Home() {
       <section
         id="work"
         data-nav-theme="dark"
-        className="scroll-mt-20 rounded-t-card-lg bg-burgundy pb-14 pt-8 text-cream sm:pb-20 sm:pt-12"
+        className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-burgundy pb-14 pt-8 text-cream sm:pb-20 sm:pt-12"
       >
         <div className="mx-auto max-w-6xl space-y-8 px-5 sm:px-8 lg:px-16">
           <Reveal className="text-center">
@@ -232,7 +232,7 @@ export default async function Home() {
       {testimonials && testimonials.length > 0 && (
         <section
           data-nav-theme="light"
-          className="rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
+          className="relative z-10 -mt-7 rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
         >
           <div className="mx-auto max-w-6xl space-y-8">
             <Reveal className="space-y-1">
@@ -295,7 +295,7 @@ export default async function Home() {
       <section
         id="contact"
         data-nav-theme="light"
-        className="scroll-mt-20 rounded-t-card-lg bg-pink px-5 py-20 sm:px-8 sm:py-28 lg:px-16"
+        className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-pink px-5 py-20 sm:px-8 sm:py-28 lg:px-16"
       >
         <Reveal className="mx-auto max-w-3xl space-y-7 text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
