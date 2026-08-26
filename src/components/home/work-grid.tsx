@@ -16,7 +16,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
 
   return (
     <div className="space-y-6">
-      <div className="no-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-4 pt-4 sm:gap-7 sm:px-8 lg:px-16">
+      <div className="no-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-4 pt-6 sm:gap-7 sm:px-8 sm:pt-8 lg:px-16">
         {visible.map((project, i) => {
           const tilt = TILTS[i % TILTS.length];
 
@@ -86,7 +86,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
                     {project.services?.map((s) => (
                       <span
                         key={s}
-                        className="rounded-pill bg-cream px-1.5 py-0.5 text-[9px] font-medium text-ink/60 sm:px-2.5 sm:py-1 sm:text-xs"
+                        className="inline-flex items-center justify-center rounded-pill bg-cream px-1.5 py-0.5 text-[9px] font-medium leading-none text-ink/60 sm:px-2.5 sm:py-1 sm:text-xs"
                       >
                         {SERVICE_LABELS[s] ?? s}
                       </span>

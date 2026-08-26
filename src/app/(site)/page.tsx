@@ -205,9 +205,9 @@ export default async function Home() {
       <section
         id="work"
         data-nav-theme="dark"
-        className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-burgundy pb-14 pt-8 text-cream sm:pb-20 sm:pt-12"
+        className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-burgundy pb-14 pt-12 text-cream sm:pb-20 sm:pt-12"
       >
-        <div className="mx-auto max-w-6xl space-y-8 px-5 sm:px-8 lg:px-16">
+        <div className="mx-auto max-w-6xl space-y-10 px-5 sm:px-8 lg:px-16">
           <Reveal className="flex items-center justify-between gap-4 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:justify-normal">
             <span aria-hidden="true" className="hidden sm:block" />
             <h2 className="font-display text-display-md sm:text-center">
