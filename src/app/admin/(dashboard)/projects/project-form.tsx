@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import Image from "next/image";
 import { upsertBrand } from "./actions";
-import type { Brand as Project } from "@/lib/types/database";
+import type { Brand as Project, BrandLogo } from "@/lib/types/database";
 
 const SERVICE_OPTIONS = [
   { value: "campaign", label: "Campaign" },
@@ -13,11 +13,18 @@ const SERVICE_OPTIONS = [
   { value: "social_media_management", label: "Social media management" },
 ] as const;
 
-export function ProjectForm({ project }: { project?: Project }) {
+export function ProjectForm({
+  project,
+  brandLogos,
+}: {
+  project?: Project;
+  brandLogos: BrandLogo[];
+}) {
   const [state, formAction, pending] = useActionState(upsertBrand, null);
   const [logoPreview, setLogoPreview] = useState<string | null>(
     project?.logo_url ?? null,
   );
+  const [existingLogoUrl, setExistingLogoUrl] = useState("");
   const [coverPreview, setCoverPreview] = useState<string | null>(
     project?.cover_image_url ?? null,
   );
@@ -163,6 +170,36 @@ export function ProjectForm({ project }: { project?: Project }) {
             />
           </div>
         )}
+
+        {brandLogos.length > 0 && (
+          <div className="space-y-1.5">
+            <label
+              htmlFor="existing_logo"
+              className="text-xs font-medium text-ink/60"
+            >
+              Reuse a logo already added under Brands I&apos;ve worked with
+            </label>
+            <select
+              id="existing_logo"
+              value={existingLogoUrl}
+              onChange={(e) => {
+                const url = e.target.value;
+                setExistingLogoUrl(url);
+                if (url) setLogoPreview(url);
+              }}
+              className="w-full rounded-md border border-ink/15 px-3.5 py-3 text-base outline-none focus:border-burgundy"
+            >
+              <option value="">— Upload a new logo instead —</option>
+              {brandLogos.map((b) => (
+                <option key={b.id} value={b.logo_url}>
+                  {b.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        <input type="hidden" name="existing_logo_url" value={existingLogoUrl} />
+
         <input
           id="logo"
           name="logo"
@@ -170,10 +207,18 @@ export function ProjectForm({ project }: { project?: Project }) {
           accept="image/png,image/jpeg,image/webp,image/svg+xml"
           onChange={(e) => {
             const file = e.target.files?.[0];
-            if (file) setLogoPreview(URL.createObjectURL(file));
+            if (file) {
+              setExistingLogoUrl("");
+              setLogoPreview(URL.createObjectURL(file));
+            }
           }}
           className="w-full text-sm"
         />
+        {brandLogos.length > 0 && (
+          <p className="text-xs text-ink/50">
+            Picking a file above overrides the dropdown selection.
+          </p>
+        )}
         <label className="mt-1.5 flex items-center gap-2 text-sm font-medium text-ink/80">
           <input
             type="checkbox"

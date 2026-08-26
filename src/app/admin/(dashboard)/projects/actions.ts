@@ -31,6 +31,7 @@ export async function upsertBrand(
   const logoFile = formData.get("logo") as File | null;
   const coverFile = formData.get("cover") as File | null;
   const logoRemoveBg = formData.get("logo_remove_bg") === "on";
+  const existingLogoUrl = String(formData.get("existing_logo_url") ?? "").trim();
 
   if (!name) return { error: "Name is required." };
   if (!slug) return { error: "Couldn't generate a slug, check the name." };
@@ -51,6 +52,8 @@ export async function upsertBrand(
     if (uploadError) return { error: `Logo upload failed: ${uploadError.message}` };
     const { data } = supabase.storage.from("logos").getPublicUrl(path);
     logoUrl = data.publicUrl;
+  } else if (existingLogoUrl) {
+    logoUrl = existingLogoUrl;
   }
 
   let coverUrl: string | undefined;

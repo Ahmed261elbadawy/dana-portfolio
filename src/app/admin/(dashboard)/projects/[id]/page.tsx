@@ -10,11 +10,10 @@ export default async function EditProjectPage({
 }) {
   const { id } = await params;
   const supabase = await createClient();
-  const { data: project } = await supabase
-    .from("brands")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const [{ data: project }, { data: brandLogos }] = await Promise.all([
+    supabase.from("brands").select("*").eq("id", id).single(),
+    supabase.from("brand_logos").select("*").order("name", { ascending: true }),
+  ]);
 
   if (!project) notFound();
 
@@ -32,7 +31,7 @@ export default async function EditProjectPage({
         </div>
         <p className="text-ink/60">{project.name}</p>
       </div>
-      <ProjectForm project={project} />
+      <ProjectForm project={project} brandLogos={brandLogos ?? []} />
     </div>
   );
 }
