@@ -15,6 +15,7 @@ export async function upsertSkill(
   const id = (formData.get("id") as string | null) || null;
   const name = String(formData.get("name") ?? "").trim();
   const published = formData.get("published") === "on";
+  const removeBg = formData.get("remove_bg") === "on";
   const iconFile = formData.get("icon") as File | null;
 
   if (!name) return { error: "Name is required." };
@@ -22,7 +23,9 @@ export async function upsertSkill(
   let iconUrl: string | undefined;
   if (iconFile && iconFile.size > 0) {
     const original = Buffer.from(await iconFile.arrayBuffer());
-    const { buffer, processed } = await safeRemoveSolidBackground(original);
+    const { buffer, processed } = removeBg
+      ? await safeRemoveSolidBackground(original)
+      : { buffer: original, processed: false };
     const ext = processed ? "png" : (iconFile.name.split(".").pop() ?? "png");
     const contentType = processed ? "image/png" : iconFile.type || "image/png";
     const path = `skill-${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}.${ext}`;

@@ -66,6 +66,20 @@ export function SkillForm({ skill }: { skill?: Skill }) {
       <label className="flex items-center gap-2 text-sm font-medium text-ink/80">
         <input
           type="checkbox"
+          name="remove_bg"
+          defaultChecked={true}
+          className="h-4 w-4"
+        />
+        Auto-remove background
+      </label>
+      <p className="-mt-4 text-xs text-ink/50">
+        Uncheck this if the icon has a badge/circle design and removal cuts
+        into the artwork — the file uploads exactly as-is instead.
+      </p>
+
+      <label className="flex items-center gap-2 text-sm font-medium text-ink/80">
+        <input
+          type="checkbox"
           name="published"
           defaultChecked={skill?.published ?? true}
           className="h-4 w-4"

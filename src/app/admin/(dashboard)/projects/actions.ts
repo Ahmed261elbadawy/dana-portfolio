@@ -30,6 +30,7 @@ export async function upsertBrand(
   const services = formData.getAll("services").map(String) as ServiceType[];
   const logoFile = formData.get("logo") as File | null;
   const coverFile = formData.get("cover") as File | null;
+  const logoRemoveBg = formData.get("logo_remove_bg") === "on";
 
   if (!name) return { error: "Name is required." };
   if (!slug) return { error: "Couldn't generate a slug, check the name." };
@@ -37,7 +38,9 @@ export async function upsertBrand(
   let logoUrl: string | undefined;
   if (logoFile && logoFile.size > 0) {
     const original = Buffer.from(await logoFile.arrayBuffer());
-    const { buffer, processed } = await safeRemoveSolidBackground(original);
+    const { buffer, processed } = logoRemoveBg
+      ? await safeRemoveSolidBackground(original)
+      : { buffer: original, processed: false };
     const ext = processed ? "png" : (logoFile.name.split(".").pop() ?? "png");
     const contentType = processed ? "image/png" : logoFile.type || "image/png";
     const path = `${slug}-${Date.now()}.${ext}`;

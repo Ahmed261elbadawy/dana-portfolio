@@ -174,6 +174,19 @@ export function ProjectForm({ project }: { project?: Project }) {
           }}
           className="w-full text-sm"
         />
+        <label className="mt-1.5 flex items-center gap-2 text-sm font-medium text-ink/80">
+          <input
+            type="checkbox"
+            name="logo_remove_bg"
+            defaultChecked={true}
+            className="h-4 w-4"
+          />
+          Auto-remove background
+        </label>
+        <p className="text-xs text-ink/50">
+          Uncheck this if the logo has a badge/circle design and removal
+          cuts into the artwork — the file uploads exactly as-is instead.
+        </p>
       </div>
 
       <div className="space-y-1.5">

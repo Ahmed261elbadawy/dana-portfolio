@@ -16,6 +16,7 @@ export async function upsertBrandLogo(
   const name = String(formData.get("name") ?? "").trim();
   const category = String(formData.get("category") ?? "").trim() || null;
   const published = formData.get("published") === "on";
+  const removeBg = formData.get("remove_bg") === "on";
   const logoFile = formData.get("logo") as File | null;
 
   if (!name) return { error: "Brand name is required." };
@@ -23,7 +24,9 @@ export async function upsertBrandLogo(
   let logoUrl: string | undefined;
   if (logoFile && logoFile.size > 0) {
     const original = Buffer.from(await logoFile.arrayBuffer());
-    const { buffer, processed } = await safeRemoveSolidBackground(original);
+    const { buffer, processed } = removeBg
+      ? await safeRemoveSolidBackground(original)
+      : { buffer: original, processed: false };
     const ext = processed ? "png" : (logoFile.name.split(".").pop() ?? "png");
     const contentType = processed ? "image/png" : logoFile.type || "image/png";
     const path = `brand-${name.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}.${ext}`;
