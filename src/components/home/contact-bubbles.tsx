@@ -66,21 +66,28 @@ function Icon({ name }: { name: IconKey }) {
   }
 
   if (name === "canva") {
-    // Traced from Canva's mark: a thick italic "C" whose top terminal
-    // curls into a small closed hook, bottom terminal a plain round end.
+    // Traced from Canva's mark: a thick calligraphic "C" with a closed
+    // curled loop at the top terminal and a thin tapered flick at the
+    // bottom terminal.
     return (
       <svg {...common} fill="none">
         <circle cx="12" cy="12" r="11.5" fill="currentColor" />
         <path
-          d="M15.6 16.9A6.6 6.6 0 1 1 15.6 7.2"
+          d="M16.98 16.18A6.5 6.5 0 1 1 14.22 5.89"
           stroke="var(--color-cream, #F7F1E6)"
-          strokeWidth="2.6"
+          strokeWidth="3"
           strokeLinecap="round"
         />
         <path
-          d="M15.6 7.2c1.9-.2 3 .9 2.9 2.2-.1 1.1-1 1.9-2.1 1.7"
+          d="M14.22 5.89c1.7-.35 2.75.65 2.6 1.95-.1 1.05-1 1.75-2.05 1.6"
           stroke="var(--color-cream, #F7F1E6)"
-          strokeWidth="2.6"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M16.98 16.18c1.05.55 1.9 1.25 2.15 1.85"
+          stroke="var(--color-cream, #F7F1E6)"
+          strokeWidth="2"
           strokeLinecap="round"
         />
       </svg>
