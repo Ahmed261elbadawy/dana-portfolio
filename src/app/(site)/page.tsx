@@ -204,14 +204,8 @@ export default async function Home() {
         className="scroll-mt-20 rounded-t-card-lg bg-burgundy py-14 text-cream sm:py-20"
       >
         <div className="mx-auto max-w-6xl space-y-8 px-5 sm:px-8 lg:px-16">
-          <Reveal className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="font-display text-display-md">Featured work</h2>
-              <p className="mt-1 max-w-lg text-cream/70">
-                Real brand work, one card per client, filter by what she did
-                for them.
-              </p>
-            </div>
+          <Reveal>
+            <h2 className="font-display text-display-md">Featured work</h2>
           </Reveal>
 
           {!projects?.length && (
