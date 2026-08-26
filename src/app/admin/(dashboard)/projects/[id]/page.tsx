@@ -3,10 +3,6 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ProjectForm } from "../project-form";
 
-// A video cover upload goes through server-side transcoding, which can
-// take longer than the platform's default function timeout.
-export const maxDuration = 60;
-
 export default async function EditProjectPage({
   params,
 }: {

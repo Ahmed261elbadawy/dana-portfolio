@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { Brand, ServiceType } from "@/lib/types/database";
 import { safeRemoveSolidBackground } from "@/lib/image/remove-background";
-import { safeTranscodeToMp4 } from "@/lib/video/transcode-to-mp4";
 
 function slugify(input: string) {
   return input
@@ -57,21 +56,9 @@ export async function upsertBrand(
   let coverUrl: string | undefined;
   if (coverFile && coverFile.size > 0) {
     const isVideo = coverFile.type.startsWith("video/");
-    const original = Buffer.from(await coverFile.arrayBuffer());
-
-    let buffer: Buffer = original;
-    let ext = coverFile.name.split(".").pop() ?? "jpg";
-    let contentType = coverFile.type || "image/jpeg";
-
-    if (isVideo) {
-      const result = await safeTranscodeToMp4(original);
-      buffer = result.buffer;
-      if (result.transcoded) {
-        ext = "mp4";
-        contentType = "video/mp4";
-      }
-    }
-
+    const buffer = Buffer.from(await coverFile.arrayBuffer());
+    const ext = coverFile.name.split(".").pop() ?? "jpg";
+    const contentType = coverFile.type || "image/jpeg";
     const bucket = isVideo ? "videos" : "images";
     const path = `${slug}-cover-${Date.now()}.${ext}`;
     const { error: uploadError } = await supabase.storage
