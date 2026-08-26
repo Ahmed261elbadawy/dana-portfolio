@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { Brand } from "@/lib/types/database";
@@ -15,46 +12,10 @@ function isVideoUrl(url: string) {
 }
 
 export function WorkGrid({ projects }: { projects: Brand[] }) {
-  const [filter, setFilter] = useState<string | null>(null);
-
-  const allServices = Array.from(
-    new Set(projects.flatMap((p) => p.services ?? [])),
-  );
-
-  const visible = filter
-    ? projects.filter((p) => p.services?.includes(filter as never))
-    : projects;
+  const visible = projects;
 
   return (
     <div className="space-y-6">
-      {allServices.length > 1 && (
-        <div className="no-scrollbar flex gap-2 overflow-x-auto px-5 sm:flex-wrap sm:px-8 lg:px-16">
-          <button
-            onClick={() => setFilter(null)}
-            className={`shrink-0 rounded-pill px-4 py-2.5 text-sm font-medium transition-colors ${
-              filter === null
-                ? "bg-ink text-cream"
-                : "bg-paper text-ink/70 hover:bg-ink/5"
-            }`}
-          >
-            All work
-          </button>
-          {allServices.map((s) => (
-            <button
-              key={s}
-              onClick={() => setFilter(s)}
-              className={`shrink-0 rounded-pill px-4 py-2.5 text-sm font-medium transition-colors ${
-                filter === s
-                  ? "bg-ink text-cream"
-                  : "bg-paper text-ink/70 hover:bg-ink/5"
-              }`}
-            >
-              {SERVICE_LABELS[s] ?? s}
-            </button>
-          ))}
-        </div>
-      )}
-
       <div className="no-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-4 pt-4 sm:gap-7 sm:px-8 lg:px-16">
         {visible.map((project, i) => {
           const tilt = TILTS[i % TILTS.length];
