@@ -14,7 +14,7 @@ export function SiteFooter({
   const whatsappHref = `https://wa.me/${contactWhatsapp.replace(/[^\d]/g, "")}`;
 
   return (
-    <footer className="bg-ink px-5 pb-24 pt-16 text-cream sm:px-8 sm:pb-10 sm:pt-20 lg:px-16">
+    <footer className="rounded-t-card-lg bg-ink px-5 pb-24 pt-16 text-cream sm:px-8 sm:pb-10 sm:pt-20 lg:px-16">
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-[1.3fr_1fr_1fr]">
           <div className="space-y-4">

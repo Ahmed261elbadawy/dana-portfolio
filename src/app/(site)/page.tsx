@@ -152,7 +152,7 @@ export default async function Home() {
       <section
         id="services"
         data-nav-theme="light"
-        className="scroll-mt-20 rounded-t-card-lg px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
+        className="scroll-mt-20 rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
       >
         <div className="mx-auto max-w-6xl space-y-10">
           <Reveal className="max-w-2xl space-y-3">
