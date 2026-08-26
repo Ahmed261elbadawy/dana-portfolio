@@ -27,7 +27,7 @@ export const FALLBACK_WHATSAPP = "+20 111 477 1229";
 
 export const SERVICE_LABELS: Record<string, string> = {
   campaign: "Campaign",
-  strategy: "Strategy",
+  strategy: "Brand Strategy",
   content_creation: "Content creation",
   art_direction: "Creative direction",
   social_media_management: "Social media management",
