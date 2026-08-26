@@ -28,7 +28,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
   return (
     <div className="space-y-6">
       {allServices.length > 1 && (
-        <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
+        <div className="no-scrollbar flex gap-2 overflow-x-auto px-5 sm:flex-wrap sm:px-8 lg:px-16">
           <button
             onClick={() => setFilter(null)}
             className={`shrink-0 rounded-pill px-4 py-2.5 text-sm font-medium transition-colors ${
@@ -55,7 +55,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
         </div>
       )}
 
-      <div className="no-scrollbar -mx-5 flex snap-x gap-4 overflow-x-auto px-2 pb-4 pt-4 sm:mx-0 sm:gap-7">
+      <div className="no-scrollbar flex snap-x gap-4 overflow-x-auto px-5 pb-4 pt-4 sm:gap-7 sm:px-8 lg:px-16">
         {visible.map((project, i) => {
           const tilt = TILTS[i % TILTS.length];
 

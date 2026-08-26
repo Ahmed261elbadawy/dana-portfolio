@@ -201,9 +201,9 @@ export default async function Home() {
       <section
         id="work"
         data-nav-theme="dark"
-        className="scroll-mt-20 rounded-t-card-lg bg-burgundy px-5 py-14 text-cream sm:px-8 sm:py-20 lg:px-16"
+        className="scroll-mt-20 rounded-t-card-lg bg-burgundy py-14 text-cream sm:py-20"
       >
-        <div className="mx-auto max-w-6xl space-y-8">
+        <div className="mx-auto max-w-6xl space-y-8 px-5 sm:px-8 lg:px-16">
           <Reveal className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="font-display text-display-md">Featured work</h2>
@@ -214,14 +214,14 @@ export default async function Home() {
             </div>
           </Reveal>
 
-          {!projects?.length ? (
+          {!projects?.length && (
             <p className="rounded-card bg-paper p-6 text-ink/60">
               New work is on its way, check back soon.
             </p>
-          ) : (
-            <WorkGrid projects={projects} />
           )}
         </div>
+
+        {projects?.length ? <WorkGrid projects={projects} /> : null}
       </section>
 
       {((skills && skills.length > 0) ||
