@@ -94,7 +94,7 @@ export default async function Home() {
           </h1>
 
           <span
-            className="animate-rise-in order-2 flex flex-wrap items-center gap-x-1.5 text-xs font-semibold uppercase tracking-wide text-cream/60 sm:inline-flex sm:rounded-pill sm:bg-cream sm:px-4 sm:py-2 sm:text-burgundy sm:shadow-sm lg:order-1 lg:col-start-1"
+            className="animate-rise-in order-3 flex flex-wrap items-center gap-x-1.5 text-xs font-semibold uppercase tracking-wide text-cream/60 sm:inline-flex sm:rounded-pill sm:bg-cream sm:px-4 sm:py-2 sm:text-burgundy sm:shadow-sm lg:order-1 lg:col-start-1"
             style={{ animationDelay: "90ms" }}
           >
             {FALLBACK_ROLE_PARTS.map((part, i) => (
@@ -106,7 +106,7 @@ export default async function Home() {
           </span>
 
           <div
-            className="animate-rise-in order-3 max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
+            className="animate-rise-in order-4 max-w-2xl space-y-3 text-lg text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
             style={{ animationDelay: "180ms" }}
           >
             {intro
@@ -120,7 +120,7 @@ export default async function Home() {
           </div>
 
           <div
-            className="animate-rise-in order-4 lg:order-4 lg:col-start-1"
+            className="animate-rise-in order-2 lg:order-4 lg:col-start-1"
             style={{ animationDelay: "220ms" }}
           >
             <AnimatedStats stats={FALLBACK_STATS} />
