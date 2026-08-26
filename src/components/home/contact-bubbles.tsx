@@ -54,37 +54,26 @@ function Icon({ name }: { name: IconKey }) {
   }
 
   if (name === "canva") {
-    // Filled disc with a cut-out "C", matching Canva's monogram.
+    // Filled disc with Canva's serif "C" monogram, drawn from their mark.
     return (
       <svg {...common}>
         <circle cx="12" cy="12" r="11.5" fill="currentColor" />
         <path
-          d="M16 8.4a5 5 0 1 0 0 7.2"
-          fill="none"
-          stroke="var(--color-cream, #F7F1E6)"
-          strokeWidth="2.6"
-          strokeLinecap="round"
+          d="M13.55 6.6c-3.15 0-5.7 2.55-5.7 5.7 0 2.85 2.05 5.1 4.75 5.1 1.35 0 2.4-.55 3.05-1.3.2-.25.15-.5-.05-.65l-.5-.4c-.2-.15-.4-.15-.6.05-.5.5-1.1.85-1.85.85-1.6 0-2.85-1.45-2.85-3.35 0-2.1 1.35-3.85 3.05-3.85.7 0 1.2.25 1.55.6.15.15.35.2.55.05l.55-.45c.2-.15.2-.4.05-.6-.65-.7-1.7-1.15-2.95-1.15Z"
+          fill="var(--color-cream, #F7F1E6)"
         />
       </svg>
     );
   }
 
   if (name === "capcut") {
-    // Editing/clip mark: rounded frame with a play wedge.
+    // CapCut's mark: two facing brackets around a center dot, not a play
+    // button, so it doesn't read as a YouTube icon.
     return (
-      <svg {...common}>
-        <rect
-          x="1.6"
-          y="1.6"
-          width="20.8"
-          height="20.8"
-          rx="6.4"
-          fill="currentColor"
-        />
-        <path
-          d="M10 8.6l6 3.4-6 3.4z"
-          fill="var(--color-cream, #F7F1E6)"
-        />
+      <svg {...common} fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+        <path d="M8.6 4.5c-2.8 1-4.7 3.9-4.7 7.5s1.9 6.5 4.7 7.5" />
+        <path d="M15.4 4.5c2.8 1 4.7 3.9 4.7 7.5s-1.9 6.5-4.7 7.5" />
+        <circle cx="12" cy="12" r="2.1" fill="currentColor" stroke="none" />
       </svg>
     );
   }
@@ -116,6 +105,12 @@ const ICONS: IconKey[] = [
   "camera",
   "food",
 ];
+
+// Some marks have more built-in padding than others at the same viewBox,
+// so a per-icon nudge keeps them visually the same weight inside the bubble.
+const ICON_SCALE: Partial<Record<IconKey, number>> = {
+  pinterest: 1.28,
+};
 
 type Bubble = {
   x: number;
@@ -481,18 +476,19 @@ export function ContactBubbles() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden [&>*]:pointer-events-auto"
       >
-        {ICONS.map((name, i) => (
+        {ICONS.map((name) => (
           <span
             key={name}
             data-bubble
             style={{ willChange: "transform" }}
-            className={`absolute left-0 top-0 grid touch-none place-items-center rounded-full bg-cream text-burgundy shadow-[0_6px_20px_rgba(74,18,38,0.14)] ring-1 ring-burgundy/10 ${
-              i % 3 === 0
-                ? "h-14 w-14 p-3.5 sm:h-20 sm:w-20 sm:p-5"
-                : "h-12 w-12 p-3 sm:h-16 sm:w-16 sm:p-4"
-            }`}
+            className="absolute left-0 top-0 grid h-14 w-14 touch-none place-items-center rounded-full bg-cream/20 p-3.5 text-burgundy shadow-[0_6px_20px_rgba(74,18,38,0.1)] ring-1 ring-burgundy/10 sm:h-20 sm:w-20 sm:p-5"
           >
-            <Icon name={name} />
+            <span
+              className="block h-full w-full"
+              style={{ transform: `scale(${ICON_SCALE[name] ?? 1})` }}
+            >
+              <Icon name={name} />
+            </span>
         </span>
       ))}
     </div>

@@ -311,7 +311,7 @@ export default async function Home() {
       <section
         id="contact"
         data-nav-theme="light"
-        className="relative z-10 -mt-7 min-h-[38rem] scroll-mt-20 overflow-hidden rounded-t-card-lg bg-pink px-5 py-20 sm:min-h-[44rem] sm:px-8 sm:py-28 lg:px-16"
+        className="relative z-10 -mt-7 scroll-mt-20 overflow-hidden rounded-t-card-lg bg-pink px-5 py-20 sm:px-8 sm:py-28 lg:px-16"
       >
         <ContactBubbles />
         <div
