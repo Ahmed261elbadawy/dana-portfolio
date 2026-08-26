@@ -91,76 +91,9 @@ export async function removeSolidBackground(input: Buffer): Promise<Buffer> {
     }
   }
 
-  removeLargeSolidBlobs(data, width, height, channels);
   recolorWhiteForeground(data, width, height, channels);
 
   return sharp(data, { raw: { width, height, channels } }).png().toBuffer();
-}
-
-// Some logos are exported as a mark already sitting inside its own solid
-// badge (a white or near-white circle/rounded-square "seal"), not touching
-// the image edges - the border-based key above can't see that, since it
-// only samples the perimeter. This finds any connected near-white region
-// that's large relative to the whole image (a real badge shape, not just
-// an antialiasing fleck or a letter's counter) and clears it too. Small
-// or already-clear regions are left alone.
-function removeLargeSolidBlobs(
-  data: Buffer,
-  width: number,
-  height: number,
-  channels: number,
-) {
-  const total = width * height;
-  const nearWhiteThreshold = 46;
-  const minBlobFraction = 0.1;
-  const visited = new Uint8Array(total);
-
-  for (let start = 0; start < total; start++) {
-    if (visited[start]) continue;
-    const startIdx = start * channels;
-    if (data[startIdx + 3] === 0) {
-      visited[start] = 1;
-      continue;
-    }
-    if (colorDist(data, startIdx, 255, 255, 255) >= nearWhiteThreshold) {
-      continue;
-    }
-
-    const region: number[] = [start];
-    visited[start] = 1;
-    let head = 0;
-    while (head < region.length) {
-      const p = region[head++];
-      const x = p % width;
-      const y = (p / width) | 0;
-      const neighbors = [
-        [x - 1, y],
-        [x + 1, y],
-        [x, y - 1],
-        [x, y + 1],
-      ];
-      for (const [nx, ny] of neighbors) {
-        if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
-        const np = ny * width + nx;
-        if (visited[np]) continue;
-        const nIdx = np * channels;
-        if (data[nIdx + 3] === 0) {
-          visited[np] = 1;
-          continue;
-        }
-        if (colorDist(data, nIdx, 255, 255, 255) < nearWhiteThreshold) {
-          visited[np] = 1;
-          region.push(np);
-        }
-      }
-    }
-
-    if (region.length / total >= minBlobFraction) {
-      for (const p of region) {
-        data[p * channels + 3] = 0;
-      }
-    }
-  }
 }
 
 // After the background is cleared, a white/near-white logo (common for
