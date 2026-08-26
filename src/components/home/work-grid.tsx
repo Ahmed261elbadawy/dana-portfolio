@@ -82,18 +82,16 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
                     {project.industry}
                   </p>
 
-                  {project.services?.length > 0 && (
-                    <div className="mt-2 flex flex-wrap justify-center gap-1">
-                      {project.services.map((s) => (
-                        <span
-                          key={s}
-                          className="rounded-pill bg-cream px-1.5 py-0.5 text-[9px] font-medium text-ink/60 sm:px-2.5 sm:py-1 sm:text-xs"
-                        >
-                          {SERVICE_LABELS[s] ?? s}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+                  <div className="mt-2 flex min-h-[24px] flex-wrap justify-center gap-1 sm:min-h-[30px]">
+                    {project.services?.map((s) => (
+                      <span
+                        key={s}
+                        className="rounded-pill bg-cream px-1.5 py-0.5 text-[9px] font-medium text-ink/60 sm:px-2.5 sm:py-1 sm:text-xs"
+                      >
+                        {SERVICE_LABELS[s] ?? s}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
               </TiltCard>
