@@ -29,13 +29,12 @@ const BRAND_PATHS = {
     "M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z",
   pinterest:
     "M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z",
-  youtube:
-    "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z",
 } as const;
 
 type IconKey =
   | keyof typeof BRAND_PATHS
   | "canva"
+  | "youtube"
   | "camera"
   | "food";
 
@@ -46,6 +45,18 @@ function Icon({ name }: { name: IconKey }) {
     "aria-hidden": true as const,
   };
 
+  if (name === "youtube") {
+    // Rounded rect + play triangle, drawn as two shapes instead of relying
+    // on the official path's fill-winding, which was rendering wrong at
+    // small sizes and single-color fill.
+    return (
+      <svg {...common}>
+        <rect x="1.5" y="4.5" width="21" height="15" rx="5" fill="currentColor" />
+        <path d="M10 8.7l6 3.3-6 3.3z" fill="var(--color-cream, #F7F1E6)" />
+      </svg>
+    );
+  }
+
   if (name in BRAND_PATHS) {
     return (
       <svg {...common} fill="currentColor">
@@ -55,15 +66,18 @@ function Icon({ name }: { name: IconKey }) {
   }
 
   if (name === "canva") {
-    // Filled disc with a thick cursive "C" and its small tail-hook,
-    // matching the weight and silhouette of Canva's real monogram.
+    // Bold ring open on the right, matching Canva's thick cursive "C",
+    // with a small terminal dot for its tail-hook.
     return (
-      <svg {...common}>
+      <svg {...common} fill="none">
         <circle cx="12" cy="12" r="11.5" fill="currentColor" />
         <path
-          d="M15.7 7.3c-1-.85-2.25-1.35-3.65-1.35-3.35 0-5.9 2.7-5.9 6.05s2.4 5.85 5.55 5.85c1.55 0 2.85-.55 3.75-1.35.35-.3.3-.7 0-.95l-.55-.5c-.3-.25-.6-.25-.95.05-.6.5-1.35.85-2.15.85-1.95 0-3.35-1.65-3.35-3.95 0-2.4 1.5-4.25 3.5-4.25.85 0 1.55.3 2.1.8.3.25.6.25.9-.05l.6-.6c.3-.3.25-.6-.05-.85"
-          fill="var(--color-cream, #F7F1E6)"
+          d="M17.6 7.3A7.3 7.3 0 1 0 17.6 16.7"
+          stroke="var(--color-cream, #F7F1E6)"
+          strokeWidth="4.2"
+          strokeLinecap="round"
         />
+        <circle cx="17.6" cy="7.3" r="1.1" fill="var(--color-cream, #F7F1E6)" />
       </svg>
     );
   }
@@ -101,8 +115,6 @@ const ICONS: IconKey[] = [
 const ICON_SCALE: Partial<Record<IconKey, number>> = {
   pinterest: 1.35,
   facebook: 1.2,
-  canva: 1.12,
-  youtube: 1.2,
 };
 
 type Bubble = {
@@ -199,8 +211,34 @@ export function ContactBubbles() {
       else b.y = pick.value;
     };
 
+    // On mobile the safe box already takes up almost the whole section, so
+    // instead of scattering bubbles around the text, line them up in a
+    // small row underneath the buttons — a mini icon strip, not a float.
+    const isMobile = width < 640;
+
     const bubbles: Bubble[] = els.map((el, i) => {
       const r = el.offsetWidth / 2;
+
+      if (isMobile) {
+        const cols = 4;
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const marginX = r + 10;
+        const usable = Math.max(width - marginX * 2, 1);
+        const rowTop = safe.y + safe.h + 14 + r;
+        const b = {
+          r,
+          x: marginX + (usable * (col + 0.5)) / cols,
+          y: rowTop + row * (r * 2 + 12),
+          vx: (Math.random() - 0.5) * 0.6,
+          vy: (Math.random() - 0.5) * 0.6,
+          el,
+        };
+        b.x = Math.min(Math.max(b.x, b.r), Math.max(width - b.r, b.r));
+        b.y = Math.min(Math.max(b.y, b.r), Math.max(height - b.r, b.r));
+        return b;
+      }
+
       // Seed around the perimeter so nothing starts buried under the text.
       const t = (i / els.length) * Math.PI * 2;
       const b = {
@@ -211,10 +249,10 @@ export function ContactBubbles() {
         vy: Math.sin(t * 2) * 1.4,
         el,
       };
-      // A tall/narrow section (mobile) can make the perimeter ellipse pass
-      // straight through the text block — settle out of it before first
-      // paint. Clamping to the walls can push a bubble back into the safe
-      // zone, so alternate the two constraints until both hold.
+      // A tall/narrow section can make the perimeter ellipse pass straight
+      // through the text block — settle out of it before first paint.
+      // Clamping to the walls can push a bubble back into the safe zone, so
+      // alternate the two constraints until both hold.
       for (let pass = 0; pass < 6; pass++) {
         b.x = Math.min(Math.max(b.x, b.r), Math.max(width - b.r, b.r));
         b.y = Math.min(Math.max(b.y, b.r), Math.max(height - b.r, b.r));
@@ -474,7 +512,7 @@ export function ContactBubbles() {
             key={name}
             data-bubble
             style={{ willChange: "transform" }}
-            className="absolute left-0 top-0 grid h-10 w-10 touch-none place-items-center rounded-full bg-cream/20 p-2 text-burgundy shadow-[0_6px_20px_rgba(74,18,38,0.1)] ring-1 ring-burgundy/10 sm:h-14 sm:w-14 sm:p-3"
+            className="absolute left-0 top-0 grid h-9 w-9 touch-none place-items-center rounded-full bg-cream/20 p-1.5 text-burgundy shadow-[0_6px_20px_rgba(74,18,38,0.1)] ring-1 ring-burgundy/10 sm:h-11 sm:w-11 sm:p-2"
           >
             <span
               className="block h-full w-full"
