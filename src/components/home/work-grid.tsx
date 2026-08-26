@@ -24,7 +24,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
             <Link
               key={project.id}
               href={`/work/${project.slug}`}
-              className="group w-[50%] min-w-[168px] shrink-0 snap-start sm:w-72"
+              className="group w-[72%] min-w-[240px] shrink-0 snap-start sm:w-72"
             >
               <TiltCard>
               <div
