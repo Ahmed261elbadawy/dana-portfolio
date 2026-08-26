@@ -66,18 +66,23 @@ function Icon({ name }: { name: IconKey }) {
   }
 
   if (name === "canva") {
-    // Bold ring open on the right, matching Canva's thick cursive "C",
-    // with a small terminal dot for its tail-hook.
+    // Traced from Canva's mark: a thick italic "C" whose top terminal
+    // curls into a small closed hook, bottom terminal a plain round end.
     return (
       <svg {...common} fill="none">
         <circle cx="12" cy="12" r="11.5" fill="currentColor" />
         <path
-          d="M17.6 7.3A7.3 7.3 0 1 0 17.6 16.7"
+          d="M15.6 16.9A6.6 6.6 0 1 1 15.6 7.2"
           stroke="var(--color-cream, #F7F1E6)"
-          strokeWidth="4.2"
+          strokeWidth="2.6"
           strokeLinecap="round"
         />
-        <circle cx="17.6" cy="7.3" r="1.1" fill="var(--color-cream, #F7F1E6)" />
+        <path
+          d="M15.6 7.2c1.9-.2 3 .9 2.9 2.2-.1 1.1-1 1.9-2.1 1.7"
+          stroke="var(--color-cream, #F7F1E6)"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
       </svg>
     );
   }
