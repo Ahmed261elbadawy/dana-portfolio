@@ -135,6 +135,18 @@ export type Certificate = {
   created_at: string;
 };
 
+export type WorkGalleryCategory = "grids" | "production" | "direction";
+
+export type WorkGalleryItem = {
+  id: string;
+  category: WorkGalleryCategory;
+  media_url: string;
+  alt_text: string | null;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -202,6 +214,12 @@ export interface Database {
         Row: Certificate;
         Insert: Partial<Certificate>;
         Update: Partial<Certificate>;
+        Relationships: [];
+      };
+      work_gallery_items: {
+        Row: WorkGalleryItem;
+        Insert: Partial<WorkGalleryItem>;
+        Update: Partial<WorkGalleryItem>;
         Relationships: [];
       };
     };

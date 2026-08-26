@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { WorkGrid } from "@/components/home/work-grid";
 import { MarqueeBand } from "@/components/home/marquee-band";
@@ -202,8 +203,17 @@ export default async function Home() {
         className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-burgundy pb-14 pt-8 text-cream sm:pb-20 sm:pt-12"
       >
         <div className="mx-auto max-w-6xl space-y-8 px-5 sm:px-8 lg:px-16">
-          <Reveal className="text-center">
-            <h2 className="font-display text-display-md">Featured work</h2>
+          <Reveal className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+            <span aria-hidden="true" />
+            <h2 className="text-center font-display text-display-md">
+              Featured work
+            </h2>
+            <Link
+              href="/work"
+              className="justify-self-end whitespace-nowrap rounded-pill border border-cream/25 px-4 py-2 text-sm font-medium text-cream/80 transition-colors hover:bg-cream/10"
+            >
+              See all
+            </Link>
           </Reveal>
 
           {!projects?.length && (

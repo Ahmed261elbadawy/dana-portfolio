@@ -6,6 +6,7 @@ import { InstallAppButton } from "@/components/admin/install-app-button";
 const navItems = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/projects", label: "Projects" },
+  { href: "/admin/work-gallery", label: "All work page" },
   { href: "/admin/testimonials", label: "Testimonials" },
   { href: "/admin/brand-logos", label: "Brand logos" },
   { href: "/admin/skills-certifications", label: "Skills & certifications" },
