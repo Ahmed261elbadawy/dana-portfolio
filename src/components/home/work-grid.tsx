@@ -104,9 +104,10 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
                       <Image
                         src={project.logo_url}
                         alt=""
-                        width={26}
-                        height={26}
+                        width={96}
+                        height={96}
                         className="max-h-full max-w-full object-contain"
+                        unoptimized
                       />
                     </div>
                   )}
