@@ -16,7 +16,11 @@ export async function safeRemoveSolidBackground(
   input: Buffer,
 ): Promise<{ buffer: Buffer; processed: boolean }> {
   try {
-    return { buffer: await removeSolidBackground(input), processed: true };
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("background removal timed out")), 6000),
+    );
+    const buffer = await Promise.race([removeSolidBackground(input), timeout]);
+    return { buffer, processed: true };
   } catch (err) {
     console.error("removeSolidBackground failed, uploading original", err);
     return { buffer: input, processed: false };
@@ -33,6 +37,11 @@ export async function safeRemoveSolidBackground(
 export async function removeSolidBackground(input: Buffer): Promise<Buffer> {
   const { default: sharp } = await import("sharp");
   const { data, info } = await sharp(input)
+    // These are small icons/logos, never displayed larger than a couple
+    // hundred pixels - capping the working size keeps the per-pixel loops
+    // below from ever running long enough to hit a serverless function's
+    // execution time limit, regardless of how large the original upload is.
+    .resize({ width: 1000, height: 1000, fit: "inside", withoutEnlargement: true })
     .toColourspace("srgb")
     .ensureAlpha()
     .raw()

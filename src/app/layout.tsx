@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Archivo_Black, Fraunces, Inter } from "next/font/google";
 import "./globals.css";
+import { ServiceWorkerCleanup } from "@/components/sw-cleanup";
 
 const archivoBlack = Archivo_Black({
   variable: "--font-wordmark",
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${archivoBlack.variable} ${fraunces.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-cream text-ink font-body">
+        <ServiceWorkerCleanup />
         {children}
       </body>
     </html>
