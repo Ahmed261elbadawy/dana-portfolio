@@ -55,7 +55,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
         </div>
       )}
 
-      <div className="no-scrollbar -mx-5 flex snap-x gap-4 overflow-x-auto px-6 pb-4 pt-4 sm:mx-0 sm:gap-7 sm:px-2">
+      <div className="no-scrollbar -mx-5 flex snap-x gap-4 overflow-x-auto px-2 pb-4 pt-4 sm:mx-0 sm:gap-7">
         {visible.map((project, i) => {
           const tilt = TILTS[i % TILTS.length];
 
