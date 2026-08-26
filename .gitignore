@@ -45,3 +45,4 @@ next-env.d.ts
 Screenshot *.png
 /D.png
 supabase/.temp/
+scratch-*.mjs
