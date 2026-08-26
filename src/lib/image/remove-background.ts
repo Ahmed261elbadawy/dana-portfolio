@@ -50,32 +50,47 @@ export async function removeSolidBackground(input: Buffer): Promise<Buffer> {
   const { width, height, channels } = info;
   if (width < 3 || height < 3 || channels < 4) return input;
 
-  const borderIdx: number[] = [];
-  for (let x = 0; x < width; x++) {
-    borderIdx.push(x * channels, ((height - 1) * width + x) * channels);
-  }
-  for (let y = 1; y < height - 1; y++) {
-    borderIdx.push(y * width * channels, (y * width + width - 1) * channels);
+  // Sample small patches at each of the 4 corners rather than the full
+  // border perimeter. A logo mark that's circular or otherwise fills most
+  // of its square canvas often touches the middle of each edge (while
+  // still leaving the corners clear) - sampling the whole perimeter mixes
+  // logo-color pixels from those edge midpoints into the background
+  // estimate and can trip the uniformity check below, wrongly bailing out.
+  // Corners are reliably background for any reasonably-centered mark.
+  const patchSize = Math.max(2, Math.min(10, Math.floor(Math.min(width, height) / 8)));
+  const corners: [number, number][] = [
+    [0, 0],
+    [width - patchSize, 0],
+    [0, height - patchSize],
+    [width - patchSize, height - patchSize],
+  ];
+
+  const patchAverages: { r: number; g: number; b: number }[] = [];
+  for (const [cx, cy] of corners) {
+    let sumR = 0;
+    let sumG = 0;
+    let sumB = 0;
+    let count = 0;
+    for (let y = cy; y < cy + patchSize; y++) {
+      for (let x = cx; x < cx + patchSize; x++) {
+        const idx = (y * width + x) * channels;
+        sumR += data[idx];
+        sumG += data[idx + 1];
+        sumB += data[idx + 2];
+        count++;
+      }
+    }
+    patchAverages.push({ r: sumR / count, g: sumG / count, b: sumB / count });
   }
 
-  let sumR = 0;
-  let sumG = 0;
-  let sumB = 0;
-  for (const idx of borderIdx) {
-    sumR += data[idx];
-    sumG += data[idx + 1];
-    sumB += data[idx + 2];
-  }
-  const avgR = sumR / borderIdx.length;
-  const avgG = sumG / borderIdx.length;
-  const avgB = sumB / borderIdx.length;
+  const avgR = patchAverages.reduce((s, p) => s + p.r, 0) / patchAverages.length;
+  const avgG = patchAverages.reduce((s, p) => s + p.g, 0) / patchAverages.length;
+  const avgB = patchAverages.reduce((s, p) => s + p.b, 0) / patchAverages.length;
 
-  let sumSq = 0;
-  for (const idx of borderIdx) {
-    sumSq += colorDist(data, idx, avgR, avgG, avgB) ** 2;
-  }
-  const stdDev = Math.sqrt(sumSq / borderIdx.length);
-  if (stdDev > 34) return input;
+  const maxPatchDist = Math.max(
+    ...patchAverages.map((p) => Math.hypot(p.r - avgR, p.g - avgG, p.b - avgB)),
+  );
+  if (maxPatchDist > 34) return input;
 
   const threshold = 42;
   const softEdge = 22;
