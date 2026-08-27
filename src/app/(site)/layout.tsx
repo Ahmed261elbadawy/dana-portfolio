@@ -2,6 +2,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsappButton } from "@/components/whatsapp-button";
 import { CustomCursor } from "@/components/custom-cursor";
+import { ScrollProgressLine } from "@/components/scroll-progress-line";
 import { SiteTracker } from "@/components/site-tracker";
 import { createClient } from "@/lib/supabase/server";
 import { FALLBACK_WHATSAPP } from "@/lib/content";
@@ -28,6 +29,7 @@ export default async function SiteLayout({
       />
       <WhatsappButton whatsapp={settings?.whatsapp || FALLBACK_WHATSAPP} />
       <CustomCursor />
+      <ScrollProgressLine />
       <SiteTracker />
     </div>
   );
