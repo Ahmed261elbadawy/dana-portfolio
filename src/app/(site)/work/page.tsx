@@ -73,7 +73,7 @@ export default async function AllWorkPage() {
                 <h2 className="font-display text-display-md">{title}</h2>
               </div>
 
-              <MediaGrid items={sectionItems} />
+              <MediaGrid items={sectionItems} theme={theme} />
             </div>
           </section>
         );

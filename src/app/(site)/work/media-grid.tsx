@@ -113,20 +113,54 @@ function Lightbox({
   );
 }
 
-export function MediaGrid({ items }: { items: WorkGalleryItem[] }) {
+const PREVIEW_COUNT = 8;
+
+const FADE_FROM: Record<string, string> = {
+  dark: "from-burgundy",
+  light: "from-cream",
+  tint: "from-pink",
+};
+
+export function MediaGrid({
+  items,
+  theme,
+}: {
+  items: WorkGalleryItem[];
+  theme: "dark" | "light" | "tint";
+}) {
   const [openItem, setOpenItem] = useState<WorkGalleryItem | null>(null);
+  const [expanded, setExpanded] = useState(false);
+
+  const hasMore = items.length > PREVIEW_COUNT;
+  const visible = expanded ? items : items.slice(0, PREVIEW_COUNT);
 
   return (
     <>
-      <div className="columns-2 gap-3 sm:columns-3 lg:columns-4">
-        {items.map((item, i) => (
-          <MediaTile
-            key={item.id}
-            item={item}
-            tall={i % 3 !== 1}
-            onOpen={() => setOpenItem(item)}
-          />
-        ))}
+      <div className="relative">
+        <div className="columns-2 gap-3 sm:columns-3 lg:columns-4">
+          {visible.map((item, i) => (
+            <MediaTile
+              key={item.id}
+              item={item}
+              tall={i % 3 !== 1}
+              onOpen={() => setOpenItem(item)}
+            />
+          ))}
+        </div>
+
+        {hasMore && !expanded && (
+          <div
+            className={`pointer-events-none absolute inset-x-0 bottom-0 flex h-40 items-end justify-center bg-gradient-to-t ${FADE_FROM[theme]} to-transparent pb-4 sm:h-48`}
+          >
+            <button
+              type="button"
+              onClick={() => setExpanded(true)}
+              className="pointer-events-auto rounded-pill border border-current/25 bg-current/10 px-6 py-2.5 text-sm font-semibold backdrop-blur-sm transition-colors hover:bg-current/20"
+            >
+              See all
+            </button>
+          </div>
+        )}
       </div>
 
       {openItem && (
