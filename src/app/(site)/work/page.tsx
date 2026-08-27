@@ -1,14 +1,9 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import type { WorkGalleryCategory, WorkGalleryItem } from "@/lib/types/database";
+import type { WorkGalleryCategory } from "@/lib/types/database";
+import { MediaGrid } from "./media-grid";
 
 export const revalidate = 60;
-
-const VIDEO_EXT = /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i;
-
-function isVideoUrl(url: string) {
-  return VIDEO_EXT.test(url);
-}
 
 const SECTIONS: {
   category: WorkGalleryCategory;
@@ -20,34 +15,6 @@ const SECTIONS: {
   { category: "production", kicker: "02", title: "Production", theme: "dark" },
   { category: "direction", kicker: "03", title: "Direction", theme: "tint" },
 ];
-
-function MediaTile({ item, tall }: { item: WorkGalleryItem; tall: boolean }) {
-  return (
-    <div
-      className={`mb-3 break-inside-avoid overflow-hidden rounded-card bg-paper/10 ${
-        tall ? "aspect-[3/4]" : "aspect-square"
-      }`}
-    >
-      {isVideoUrl(item.media_url) ? (
-        <video
-          src={item.media_url}
-          className="h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
-      ) : (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={item.media_url}
-          alt={item.alt_text ?? ""}
-          className="h-full w-full object-cover"
-        />
-      )}
-    </div>
-  );
-}
 
 const THEME_CLASSES: Record<string, string> = {
   dark: "bg-burgundy text-cream",
@@ -109,11 +76,7 @@ export default async function AllWorkPage() {
                 <h2 className="font-display text-display-md">{title}</h2>
               </div>
 
-              <div className="columns-2 gap-3 sm:columns-3 lg:columns-4">
-                {sectionItems.map((item, i) => (
-                  <MediaTile key={item.id} item={item} tall={i % 3 !== 1} />
-                ))}
-              </div>
+              <MediaGrid items={sectionItems} />
             </div>
           </section>
         );
