@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-// The wave is injected as the first child *inside* each themed section
-// (not as one overlay sibling above everything), so it paints above that
-// section's own background but behind the section's real content — which
-// is the only way to get "behind text/photos" without a section's opaque
-// background just hiding it again.
+// Portals into a <WaveSlot /> declared as the first JSX child inside each
+// themed section (see wave-slot.tsx) — that's what lets the line paint
+// above a section's own background but behind its real content. An
+// earlier version tried to achieve this by inserting a raw DOM node with
+// insertBefore, which React didn't know about and could silently wipe out
+// on any re-render of that section; this version only ever portals into
+// nodes React itself rendered and owns.
 const VB_WIDTH = 100;
 const WAVELENGTH_PX = 520; // one full left-right swing, in real pixels
 const AMPLITUDE = 26; // swing distance from center, in viewBox units
@@ -29,8 +31,7 @@ function buildWavePath(height: number) {
 }
 
 type Segment = {
-  el: HTMLElement;
-  container: HTMLDivElement;
+  slot: HTMLElement;
   top: number;
   height: number;
   color: string;
@@ -45,46 +46,47 @@ export function ScrollWave() {
   const lengthRef = useRef(0);
 
   useEffect(() => {
-    // Only sections that already establish a positioning context (all the
-    // main page sections do — "relative z-10") are safe to insert an
-    // absolutely-positioned child into; small utility bands without their
-    // own position (marquee, trusted-logos strip) are skipped rather than
-    // risk breaking their layout.
-    const all = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-nav-theme]"),
-    );
-    const els = all.filter(
-      (el) => getComputedStyle(el).position !== "static",
-    );
-    if (els.length === 0) return;
+    const measure = () => {
+      const slots = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-wave-slot]"),
+      );
+      if (slots.length === 0) return;
 
-    const originTop = els[0].getBoundingClientRect().top + window.scrollY;
+      const originTop = slots[0].getBoundingClientRect().top + window.scrollY;
 
-    const segs: Segment[] = els.map((el) => {
-      const rect = el.getBoundingClientRect();
-      const top = rect.top + window.scrollY - originTop;
-      const container = document.createElement("div");
-      container.setAttribute("aria-hidden", "true");
-      container.style.position = "absolute";
-      container.style.inset = "0";
-      container.style.pointerEvents = "none";
-      container.style.overflow = "hidden";
-      el.insertBefore(container, el.firstChild);
-      return {
-        el,
-        container,
-        top,
-        height: rect.height,
-        color: el.getAttribute("data-nav-theme") === "dark" ? CREAM : BURGUNDY,
-      };
-    });
+      const segs: Segment[] = slots.map((slot) => {
+        const section = slot.closest<HTMLElement>("[data-nav-theme]");
+        const rect = (section ?? slot).getBoundingClientRect();
+        const top = rect.top + window.scrollY - originTop;
+        return {
+          slot,
+          top,
+          height: rect.height,
+          color:
+            section?.getAttribute("data-nav-theme") === "dark"
+              ? CREAM
+              : BURGUNDY,
+        };
+      });
 
-    const totalHeight = segs[segs.length - 1].top + segs[segs.length - 1].height;
-    setMaster({ height: totalHeight, path: buildWavePath(totalHeight) });
-    setSegments(segs);
+      const last = segs[segs.length - 1];
+      const totalHeight = last.top + last.height;
+      setMaster((prev) =>
+        prev && Math.abs(prev.height - totalHeight) < 40
+          ? prev
+          : { height: totalHeight, path: buildWavePath(totalHeight) },
+      );
+      setSegments(segs);
+    };
 
+    measure();
+    const t1 = setTimeout(measure, 300);
+    const t2 = setTimeout(measure, 1200);
+    window.addEventListener("resize", measure);
     return () => {
-      segs.forEach((s) => s.container.remove());
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener("resize", measure);
     };
   }, []);
 
@@ -162,7 +164,7 @@ export function ScrollWave() {
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
           </svg>,
-          s.container,
+          s.slot,
         ),
       )}
     </>
