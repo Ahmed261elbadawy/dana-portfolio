@@ -52,10 +52,15 @@ function buildStops(wrapper: HTMLElement, height: number): Stop[] {
   }
 
   const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+  // Sections overlap their predecessor by ~28px (the rounded-corner reveal
+  // trick), so a section's own measured top lags noticeably behind where
+  // it actually starts reading visually — pull every boundary up to
+  // compensate instead of switching color a beat late.
+  const BOUNDARY_NUDGE = 44;
   const bands = sections
     .map((s) => {
       const rect = s.getBoundingClientRect();
-      const top = rect.top + window.scrollY - wrapperTop;
+      const top = rect.top + window.scrollY - wrapperTop - BOUNDARY_NUDGE;
       const bottom = top + rect.height;
       const color =
         s.getAttribute("data-nav-theme") === "dark" ? CREAM : BURGUNDY;
@@ -228,8 +233,9 @@ export function ScrollWave() {
               d={geometry.path}
               fill="none"
               stroke={`url(#${GRADIENT_ID})`}
-              strokeWidth={7}
+              strokeWidth={18}
               strokeLinecap="round"
+              opacity={0.55}
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
           </svg>
