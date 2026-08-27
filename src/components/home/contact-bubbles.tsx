@@ -66,15 +66,22 @@ function Icon({ name }: { name: IconKey }) {
   }
 
   if (name === "canva") {
-    // The decorative loop terminal read as a muddy squiggle at this size —
-    // a plain, bold "C" is unmistakable even that small.
+    // Cursive "C" with a curled top terminal, matching the reference glyph.
+    // Two smooth strokes, not the finer tapered/closed-loop detail that
+    // turned to mud at bubble size.
     return (
       <svg {...common} fill="none">
         <circle cx="12" cy="12" r="11.5" fill="currentColor" />
         <path
-          d="M16.5 7.8A6 6 0 1 0 16.5 16.2"
+          d="M15.6 16.9A6.6 6.6 0 1 1 15.6 7.2"
           stroke="var(--color-cream, #F7F1E6)"
-          strokeWidth="3.4"
+          strokeWidth="2.8"
+          strokeLinecap="round"
+        />
+        <path
+          d="M15.6 7.2c1.9-.2 3 .9 2.9 2.2-.1 1.1-1 1.9-2.1 1.7"
+          stroke="var(--color-cream, #F7F1E6)"
+          strokeWidth="2.8"
           strokeLinecap="round"
         />
       </svg>
