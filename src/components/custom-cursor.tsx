@@ -21,6 +21,9 @@ export function CustomCursor() {
         raf = requestAnimationFrame(() => {
           raf = 0;
           if (dot) {
+            // Position is set with no transition so it never lags behind
+            // the real cursor; only the hover scale/opacity (on the inner
+            // element below) animates.
             dot.style.transform = `translate3d(${posRef.current.x}px, ${posRef.current.y}px, 0) translate(-50%, -50%)`;
           }
         });
@@ -30,14 +33,14 @@ export function CustomCursor() {
     function onOver(e: PointerEvent) {
       const target = e.target as HTMLElement;
       if (dot && target.closest("a, button, [role='button']")) {
-        dot.classList.add("scale-[2.5]", "opacity-40");
+        dot.firstElementChild?.classList.add("scale-[2.5]", "opacity-40");
       }
     }
 
     function onOut(e: PointerEvent) {
       const target = e.target as HTMLElement;
       if (dot && target.closest("a, button, [role='button']")) {
-        dot.classList.remove("scale-[2.5]", "opacity-40");
+        dot.firstElementChild?.classList.remove("scale-[2.5]", "opacity-40");
       }
     }
 
@@ -58,10 +61,14 @@ export function CustomCursor() {
   }, []);
 
   return (
+    // Position (outer) is never transitioned so it can't lag behind the
+    // real cursor. Only the inner element's hover scale/opacity animates.
     <div
       ref={dotRef}
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[100] hidden h-3 w-3 rounded-full bg-white opacity-90 mix-blend-difference transition-[transform,opacity] duration-150 ease-out will-change-transform"
-    />
+      className="pointer-events-none fixed left-0 top-0 z-[100] hidden will-change-transform"
+    >
+      <div className="h-3 w-3 rounded-full bg-white opacity-90 mix-blend-difference transition-[transform,opacity] duration-150 ease-out" />
+    </div>
   );
 }
