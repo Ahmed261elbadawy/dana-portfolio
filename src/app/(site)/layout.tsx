@@ -2,7 +2,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsappButton } from "@/components/whatsapp-button";
 import { CustomCursor } from "@/components/custom-cursor";
-import { ScrollProgressLine } from "@/components/scroll-progress-line";
+import { ScrollWave } from "@/components/scroll-wave";
 import { SiteTracker } from "@/components/site-tracker";
 import { createClient } from "@/lib/supabase/server";
 import { FALLBACK_WHATSAPP } from "@/lib/content";
@@ -22,14 +22,16 @@ export default async function SiteLayout({
   return (
     <div className="flex min-h-full flex-col">
       <SiteHeader />
-      <div className="flex-1">{children}</div>
+      <div className="relative flex-1">
+        <ScrollWave />
+        {children}
+      </div>
       <SiteFooter
         email={settings?.email ?? undefined}
         whatsapp={settings?.whatsapp ?? undefined}
       />
       <WhatsappButton whatsapp={settings?.whatsapp || FALLBACK_WHATSAPP} />
       <CustomCursor />
-      <ScrollProgressLine />
       <SiteTracker />
     </div>
   );
