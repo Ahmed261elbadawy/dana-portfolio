@@ -104,6 +104,7 @@ type Bubble = {
   vx: number;
   vy: number;
   r: number;
+  bobPhase: number;
   el: HTMLElement;
 };
 
@@ -113,6 +114,11 @@ const POINTER_RADIUS = 130;
 const POINTER_FORCE = 1.1;
 const JITTER = 0.03;
 const MAX_SPEED = 14;
+// The footer overlaps the last ~28px of this section (its rounded-top
+// curve slides up over it), so bubbles need to stay clear of that band or
+// they render partly hidden underneath it.
+const FOOTER_RESERVE = 40;
+const BOB_AMPLITUDE = 4;
 
 export function ContactBubbles() {
   const layerRef = useRef<HTMLDivElement>(null);
@@ -132,6 +138,7 @@ export function ContactBubbles() {
 
     let width = layer.clientWidth;
     let height = layer.clientHeight;
+    let floorY = Math.max(height - FOOTER_RESERVE, 1);
 
     // The headline/buttons block bubbles must stay clear of.
     let safe = { x: 0, y: 0, w: 0, h: 0 };
@@ -177,7 +184,7 @@ export function ContactBubbles() {
       if (left >= b.r) candidates.push({ axis: "x", value: left, cost: Math.abs(b.x - left) });
       if (right <= width - b.r) candidates.push({ axis: "x", value: right, cost: Math.abs(b.x - right) });
       if (top >= b.r) candidates.push({ axis: "y", value: top, cost: Math.abs(b.y - top) });
-      if (bottom <= height - b.r) candidates.push({ axis: "y", value: bottom, cost: Math.abs(b.y - bottom) });
+      if (bottom <= floorY - b.r) candidates.push({ axis: "y", value: bottom, cost: Math.abs(b.y - bottom) });
 
       if (candidates.length === 0) {
         // No escape fits (safe box larger than the section) — best effort.
@@ -213,10 +220,11 @@ export function ContactBubbles() {
           y: rowTop + row * (r * 2 + 12),
           vx: (Math.random() - 0.5) * 0.6,
           vy: (Math.random() - 0.5) * 0.6,
+          bobPhase: Math.random() * Math.PI * 2,
           el,
         };
         b.x = Math.min(Math.max(b.x, b.r), Math.max(width - b.r, b.r));
-        b.y = Math.min(Math.max(b.y, b.r), Math.max(height - b.r, b.r));
+        b.y = Math.min(Math.max(b.y, b.r), Math.max(floorY - b.r, b.r));
         return b;
       }
 
@@ -228,6 +236,7 @@ export function ContactBubbles() {
         y: height / 2 + Math.sin(t) * (height / 2 - r - 6),
         vx: Math.cos(t * 3) * 1.4,
         vy: Math.sin(t * 2) * 1.4,
+        bobPhase: Math.random() * Math.PI * 2,
         el,
       };
       // A tall/narrow section can make the perimeter ellipse pass straight
@@ -236,33 +245,36 @@ export function ContactBubbles() {
       // alternate the two constraints until both hold.
       for (let pass = 0; pass < 6; pass++) {
         b.x = Math.min(Math.max(b.x, b.r), Math.max(width - b.r, b.r));
-        b.y = Math.min(Math.max(b.y, b.r), Math.max(height - b.r, b.r));
+        b.y = Math.min(Math.max(b.y, b.r), Math.max(floorY - b.r, b.r));
         resolveSafeOverlap(b);
       }
       b.x = Math.min(Math.max(b.x, b.r), Math.max(width - b.r, b.r));
-      b.y = Math.min(Math.max(b.y, b.r), Math.max(height - b.r, b.r));
+      b.y = Math.min(Math.max(b.y, b.r), Math.max(floorY - b.r, b.r));
       return b;
     });
 
     const draw = () => {
+      const bob = performance.now() / 900;
       for (const b of bubbles) {
-        b.el.style.transform = `translate3d(${b.x - b.r}px, ${b.y - b.r}px, 0)`;
+        const wobble = Math.sin(bob + b.bobPhase) * BOB_AMPLITUDE;
+        b.el.style.transform = `translate3d(${b.x - b.r}px, ${b.y - b.r + wobble}px, 0)`;
       }
     };
 
     const measure = () => {
       width = layer.clientWidth;
       height = layer.clientHeight;
+      floorY = Math.max(height - FOOTER_RESERVE, 1);
       measureSafe();
       for (const b of bubbles) {
         b.r = b.el.offsetWidth / 2;
         for (let pass = 0; pass < 6; pass++) {
           b.x = Math.min(Math.max(b.x, b.r), Math.max(width - b.r, b.r));
-          b.y = Math.min(Math.max(b.y, b.r), Math.max(height - b.r, b.r));
+          b.y = Math.min(Math.max(b.y, b.r), Math.max(floorY - b.r, b.r));
           resolveSafeOverlap(b);
         }
         b.x = Math.min(Math.max(b.x, b.r), Math.max(width - b.r, b.r));
-        b.y = Math.min(Math.max(b.y, b.r), Math.max(height - b.r, b.r));
+        b.y = Math.min(Math.max(b.y, b.r), Math.max(floorY - b.r, b.r));
       }
       draw();
     };
@@ -390,8 +402,8 @@ export function ContactBubbles() {
         if (b.y - b.r < 0) {
           b.y = b.r;
           b.vy = Math.abs(b.vy) * RESTITUTION;
-        } else if (b.y + b.r > height) {
-          b.y = height - b.r;
+        } else if (b.y + b.r > floorY) {
+          b.y = floorY - b.r;
           b.vy = -Math.abs(b.vy) * RESTITUTION;
         }
 

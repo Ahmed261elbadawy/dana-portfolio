@@ -46,10 +46,7 @@ export default async function AllWorkPage() {
         >
           ← Back to home
         </Link>
-        <p className="mt-6 text-sm font-semibold uppercase tracking-wide text-cream/60">
-          Selected work
-        </p>
-        <h1 className="mt-2 font-display text-4xl italic leading-[0.95] sm:text-6xl lg:text-7xl">
+        <h1 className="mt-6 font-display text-4xl italic leading-[0.95] sm:text-6xl lg:text-7xl">
           Every project, <span className="not-italic">every angle.</span>
         </h1>
       </header>

@@ -6,8 +6,8 @@ import Link from "next/link";
 import { Magnetic } from "@/components/magnetic";
 
 const NAV_LINKS = [
-  { href: "/#work", label: "Work" },
   { href: "/#about", label: "About" },
+  { href: "/#work", label: "Work" },
   { href: "/#contact", label: "Contact" },
 ];
 
