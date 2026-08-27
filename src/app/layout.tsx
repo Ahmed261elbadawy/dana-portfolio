@@ -48,6 +48,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${archivoBlack.variable} ${fraunces.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        {/* Runs before paint so a reload always lands at the top instead of
+            the browser restoring the previous scroll position. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "if('scrollRestoration' in history){history.scrollRestoration='manual';}window.scrollTo(0,0);",
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-cream text-ink font-body">
         <ServiceWorkerCleanup />
         {children}
