@@ -106,10 +106,15 @@ export function ScrollWave() {
     probe.setAttribute("d", master.path);
     lengthRef.current = probe.getTotalLength();
 
-    let raf = 0;
-
+    // No rAF scheduling here on purpose: an "only queue a frame if one
+    // isn't already pending" latch is the standard pattern, but if that
+    // first requestAnimationFrame is ever delayed (backgrounded tab during
+    // load, browser busy during initial paint) the latch stays stuck
+    // "pending" forever and silently blocks every later scroll event from
+    // updating the line again. These are two cheap inline style writes —
+    // there's no real cost to just doing them straight on every scroll
+    // event instead of routing through a frame scheduler that can wedge.
     const update = () => {
-      raf = 0;
       const doc = document.documentElement;
       const max = doc.scrollHeight - doc.clientHeight;
       const pct = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0;
@@ -124,18 +129,13 @@ export function ScrollWave() {
       }
     };
 
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-
     update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
     };
   }, [master, segments]);
 
