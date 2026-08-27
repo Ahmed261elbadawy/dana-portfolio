@@ -137,9 +137,13 @@ export function SiteHeader() {
       {/* Mobile dropdown panel */}
       <div
         aria-hidden={!open}
-        className={`fixed inset-x-0 top-0 z-30 overflow-y-auto bg-burgundy transition-[max-height] duration-300 ease-out sm:hidden ${
-          open ? "max-h-screen" : "pointer-events-none max-h-0"
+        className={`fixed inset-x-0 top-0 z-30 overflow-y-auto rounded-b-card-lg bg-ink shadow-2xl transition-[opacity,transform] duration-300 ease-out sm:hidden ${
+          open ? "" : "pointer-events-none"
         }`}
+        style={{
+          opacity: open ? 1 : 0,
+          transform: open ? "translateY(0)" : "translateY(-24px)",
+        }}
       >
         <nav className="flex flex-col gap-1 px-5 pb-6 pt-24">
           {NAV_LINKS.map((link) => (
@@ -159,7 +163,7 @@ export function SiteHeader() {
             onClick={() => setOpen(false)}
             className="mt-4 inline-block w-fit rounded-pill bg-cream px-6 py-3 text-sm font-semibold text-burgundy"
           >
-            Let&apos;s talk ↗
+            Let&apos;s talk
           </Link>
         </nav>
       </div>
