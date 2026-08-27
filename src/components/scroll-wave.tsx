@@ -222,9 +222,8 @@ export function ScrollWave() {
               d={geometry.path}
               fill="none"
               stroke={`url(#${GRADIENT_ID})`}
-              strokeWidth={2.5}
+              strokeWidth={1.4}
               strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
           </svg>
