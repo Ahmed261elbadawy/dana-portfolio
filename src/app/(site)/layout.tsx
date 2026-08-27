@@ -22,14 +22,16 @@ export default async function SiteLayout({
   return (
     <div className="flex min-h-full flex-col">
       <SiteHeader />
-      <div className="flex-1">{children}</div>
+      <div className="relative flex-1">
+        <ScrollWave />
+        {children}
+      </div>
       <SiteFooter
         email={settings?.email ?? undefined}
         whatsapp={settings?.whatsapp ?? undefined}
       />
       <WhatsappButton whatsapp={settings?.whatsapp || FALLBACK_WHATSAPP} />
       <CustomCursor />
-      <ScrollWave />
       <SiteTracker />
     </div>
   );

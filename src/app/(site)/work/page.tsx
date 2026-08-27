@@ -2,7 +2,6 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { WorkGalleryCategory } from "@/lib/types/database";
 import { MediaGrid } from "./media-grid";
-import { WaveSlot } from "@/components/wave-slot";
 
 export const revalidate = 60;
 
@@ -41,7 +40,6 @@ export default async function AllWorkPage() {
         data-nav-theme="dark"
         className="relative bg-burgundy px-5 pb-14 pt-28 text-cream sm:px-8 sm:pb-20 sm:pt-32 lg:px-16"
       >
-        <WaveSlot />
         <Link
           href="/#work"
           className="text-sm text-cream/60 underline underline-offset-4"
@@ -63,7 +61,6 @@ export default async function AllWorkPage() {
             data-nav-theme={theme === "dark" ? "dark" : "light"}
             className={`relative px-5 py-14 sm:px-8 sm:py-20 lg:px-16 ${THEME_CLASSES[theme]}`}
           >
-            <WaveSlot />
             <div className="mx-auto max-w-6xl">
               <div className="mb-8 flex items-baseline gap-4">
                 <span

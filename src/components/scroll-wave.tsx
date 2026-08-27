@@ -1,21 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 
-// Portals into a <WaveSlot /> declared as the first JSX child inside each
-// themed section (see wave-slot.tsx) — that's what lets the line paint
-// above a section's own background but behind its real content. An
-// earlier version tried to achieve this by inserting a raw DOM node with
-// insertBefore, which React didn't know about and could silently wipe out
-// on any re-render of that section; this version only ever portals into
-// nodes React itself rendered and owns.
+// A thin wavy line that draws itself in as the page scrolls. It renders as
+// one overlay above section content (thin + a real stroke color per
+// section, not a blend trick) — an earlier version tried rendering it
+// *behind* content instead, which was correct in principle but meant it
+// was invisible almost everywhere: section content (cards, photos, text
+// blocks with solid backgrounds) painted over it, especially on mobile
+// where content spans nearly the full section width. A thin line sitting
+// on top is a far smaller visual intrusion than that trade-off.
 const VB_WIDTH = 100;
 const WAVELENGTH_PX = 520; // one full left-right swing, in real pixels
 const AMPLITUDE = 26; // swing distance from center, in viewBox units
 const MID_X = VB_WIDTH / 2;
+
 const CREAM = "#F7F1E6";
 const BURGUNDY = "#4A1226";
+const GRADIENT_ID = "scroll-wave-gradient";
 
 function buildWavePath(height: number) {
   const cycles = Math.max(1, Math.ceil(height / WAVELENGTH_PX));
@@ -30,102 +32,151 @@ function buildWavePath(height: number) {
   return d;
 }
 
-type Segment = {
-  slot: HTMLElement;
-  top: number;
-  height: number;
-  color: string;
-};
+type Stop = { offset: number; color: string };
+
+// Contrast comes from reading each [data-nav-theme] section's own color and
+// switching the line to whichever reads on it — the same idea the header
+// nav already uses reliably — encoded as a hard-stop gradient instead of a
+// runtime blend mode (which didn't render reliably for this SVG stroke).
+function buildStops(wrapper: HTMLElement, height: number): Stop[] {
+  const scope = wrapper.parentElement ?? document;
+  const sections = Array.from(
+    scope.querySelectorAll<HTMLElement>("[data-nav-theme]"),
+  );
+  if (sections.length === 0 || height <= 0) {
+    return [
+      { offset: 0, color: BURGUNDY },
+      { offset: 1, color: BURGUNDY },
+    ];
+  }
+
+  const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+  // Sections overlap their predecessor by ~28px (the rounded-corner reveal
+  // trick), so a section's own measured top lags behind where it actually
+  // starts reading visually — pull every boundary up to compensate.
+  const BOUNDARY_NUDGE = 44;
+  const bands = sections
+    .map((s) => {
+      const rect = s.getBoundingClientRect();
+      const top = rect.top + window.scrollY - wrapperTop - BOUNDARY_NUDGE;
+      const bottom = top + rect.height;
+      const color =
+        s.getAttribute("data-nav-theme") === "dark" ? CREAM : BURGUNDY;
+      return { top, bottom, color };
+    })
+    .sort((a, b) => a.top - b.top);
+
+  const stops: Stop[] = [];
+  const EPS = 0.001;
+  let cursor = 0;
+
+  for (const band of bands) {
+    const startFrac = Math.max(0, Math.min(1, band.top / height));
+    const endFrac = Math.max(0, Math.min(1, band.bottom / height));
+    if (endFrac <= cursor) continue;
+
+    if (startFrac > cursor) {
+      const prevColor = stops.length
+        ? stops[stops.length - 1].color
+        : BURGUNDY;
+      stops.push({ offset: cursor, color: prevColor });
+      stops.push({
+        offset: Math.max(cursor, startFrac - EPS),
+        color: prevColor,
+      });
+    }
+
+    stops.push({ offset: startFrac, color: band.color });
+    stops.push({
+      offset: Math.max(startFrac, endFrac - EPS),
+      color: band.color,
+    });
+    cursor = endFrac;
+  }
+
+  if (cursor < 1) {
+    const lastColor = stops.length ? stops[stops.length - 1].color : BURGUNDY;
+    stops.push({ offset: cursor, color: lastColor });
+    stops.push({ offset: 1, color: lastColor });
+  }
+
+  return stops;
+}
 
 export function ScrollWave() {
-  const [segments, setSegments] = useState<Segment[]>([]);
-  const [master, setMaster] = useState<{ height: number; path: string } | null>(
-    null,
-  );
-  const pathRefs = useRef<(SVGPathElement | null)[]>([]);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
   const lengthRef = useRef(0);
+  const [geometry, setGeometry] = useState<{
+    height: number;
+    path: string;
+    stops: Stop[];
+  } | null>(null);
 
   useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
     const measure = () => {
-      const slots = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-wave-slot]"),
-      );
-      if (slots.length === 0) return;
-
-      const originTop = slots[0].getBoundingClientRect().top + window.scrollY;
-
-      const segs: Segment[] = slots.map((slot) => {
-        const section = slot.closest<HTMLElement>("[data-nav-theme]");
-        const rect = (section ?? slot).getBoundingClientRect();
-        const top = rect.top + window.scrollY - originTop;
-        return {
-          slot,
-          top,
-          height: rect.height,
-          color:
-            section?.getAttribute("data-nav-theme") === "dark"
-              ? CREAM
-              : BURGUNDY,
-        };
-      });
-
-      const last = segs[segs.length - 1];
-      const totalHeight = last.top + last.height;
-      setMaster((prev) =>
-        prev && Math.abs(prev.height - totalHeight) < 40
-          ? prev
-          : { height: totalHeight, path: buildWavePath(totalHeight) },
-      );
-      setSegments(segs);
+      const height = wrapper.getBoundingClientRect().height;
+      if (height > 0) {
+        setGeometry((prev) =>
+          prev && Math.abs(prev.height - height) < 40
+            ? prev
+            : {
+                height,
+                path: buildWavePath(height),
+                stops: buildStops(wrapper, height),
+              },
+        );
+      }
     };
 
     measure();
     const t1 = setTimeout(measure, 300);
     const t2 = setTimeout(measure, 1200);
-    window.addEventListener("resize", measure);
+    const ro = new ResizeObserver(measure);
+    ro.observe(wrapper);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
-      window.removeEventListener("resize", measure);
+      ro.disconnect();
     };
   }, []);
 
   useEffect(() => {
-    if (!master || segments.length === 0) return;
+    const path = pathRef.current;
+    const dot = dotRef.current;
+    if (!path || !geometry) return;
 
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    // All segment paths share the same "d", so a single offscreen probe
-    // gives the true total length to use for every copy's dash values.
-    const probe = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "path",
-    );
-    probe.setAttribute("d", master.path);
-    lengthRef.current = probe.getTotalLength();
+    lengthRef.current = path.getTotalLength();
+    path.style.strokeDasharray = `${lengthRef.current}`;
+    path.style.strokeDashoffset = `${lengthRef.current}`;
+    if (reduced) {
+      path.style.transition = "none";
+      if (dot) dot.style.transition = "none";
+    }
 
-    // No rAF scheduling here on purpose: an "only queue a frame if one
-    // isn't already pending" latch is the standard pattern, but if that
-    // first requestAnimationFrame is ever delayed (backgrounded tab during
-    // load, browser busy during initial paint) the latch stays stuck
-    // "pending" forever and silently blocks every later scroll event from
-    // updating the line again. These are two cheap inline style writes —
-    // there's no real cost to just doing them straight on every scroll
-    // event instead of routing through a frame scheduler that can wedge.
+    // No rAF here: these are two cheap inline style writes, and the "only
+    // schedule a frame if one isn't pending" pattern can wedge permanently
+    // if that first frame is ever delayed (backgrounded tab during load).
     const update = () => {
       const doc = document.documentElement;
       const max = doc.scrollHeight - doc.clientHeight;
       const pct = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0;
       const length = lengthRef.current;
-      const dashoffset = length * (1 - pct);
 
-      for (const p of pathRefs.current) {
-        if (!p) continue;
-        p.style.strokeDasharray = `${length}`;
-        p.style.strokeDashoffset = `${dashoffset}`;
-        if (reduced) p.style.transition = "none";
+      path.style.strokeDashoffset = `${length * (1 - pct)}`;
+
+      if (dot) {
+        const point = path.getPointAtLength(length * pct);
+        dot.style.left = `${(point.x / VB_WIDTH) * 100}%`;
+        dot.style.top = `${(point.y / geometry.height) * 100}%`;
       }
     };
 
@@ -137,36 +188,53 @@ export function ScrollWave() {
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
-  }, [master, segments]);
-
-  if (!master) return null;
+  }, [geometry]);
 
   return (
-    <>
-      {segments.map((s, i) =>
-        createPortal(
+    <div
+      ref={wrapperRef}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
+    >
+      {geometry && (
+        <>
           <svg
-            key={i}
             className="absolute inset-0 h-full w-full"
-            viewBox={`0 ${s.top} ${VB_WIDTH} ${s.height}`}
+            viewBox={`0 0 ${VB_WIDTH} ${geometry.height}`}
             preserveAspectRatio="none"
           >
+            <defs>
+              <linearGradient
+                id={GRADIENT_ID}
+                x1="0"
+                y1="0"
+                x2="0"
+                y2={geometry.height}
+                gradientUnits="userSpaceOnUse"
+              >
+                {geometry.stops.map((s, i) => (
+                  <stop key={i} offset={s.offset} stopColor={s.color} />
+                ))}
+              </linearGradient>
+            </defs>
             <path
-              ref={(el) => {
-                pathRefs.current[i] = el;
-              }}
-              d={master.path}
+              ref={pathRef}
+              d={geometry.path}
               fill="none"
-              stroke={s.color}
+              stroke={`url(#${GRADIENT_ID})`}
               strokeWidth={2.5}
               strokeLinecap="round"
               vectorEffect="non-scaling-stroke"
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
-          </svg>,
-          s.slot,
-        ),
+          </svg>
+          <div
+            ref={dotRef}
+            className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cream shadow-[0_0_0_3px_rgba(74,18,38,0.35),0_0_10px_rgba(0,0,0,0.4)]"
+            style={{ left: "50%", top: "0%" }}
+          />
+        </>
       )}
-    </>
+    </div>
   );
 }
