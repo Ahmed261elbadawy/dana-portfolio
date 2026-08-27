@@ -156,8 +156,9 @@ export function ScrollWave() {
               d={master.path}
               fill="none"
               stroke={s.color}
-              strokeWidth={18}
+              strokeWidth={2.5}
               strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
           </svg>,
