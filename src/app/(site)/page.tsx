@@ -88,7 +88,7 @@ export default async function Home() {
       <section
         id="about"
         data-nav-theme="dark"
-        className="scroll-mt-20 bg-burgundy px-5 pb-16 pt-28 text-cream sm:px-8 sm:pb-24 sm:pt-32 lg:px-16"
+        className="relative scroll-mt-20 bg-burgundy px-5 pb-16 pt-28 text-cream sm:px-8 sm:pb-24 sm:pt-32 lg:px-16"
       >
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-x-16 lg:gap-y-7">
           <h1

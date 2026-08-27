@@ -38,7 +38,7 @@ export default async function AllWorkPage() {
       {/* Header */}
       <header
         data-nav-theme="dark"
-        className="bg-burgundy px-5 pb-14 pt-28 text-cream sm:px-8 sm:pb-20 sm:pt-32 lg:px-16"
+        className="relative bg-burgundy px-5 pb-14 pt-28 text-cream sm:px-8 sm:pb-20 sm:pt-32 lg:px-16"
       >
         <Link
           href="/#work"
@@ -59,7 +59,7 @@ export default async function AllWorkPage() {
           <section
             key={category}
             data-nav-theme={theme === "dark" ? "dark" : "light"}
-            className={`px-5 py-14 sm:px-8 sm:py-20 lg:px-16 ${THEME_CLASSES[theme]}`}
+            className={`relative px-5 py-14 sm:px-8 sm:py-20 lg:px-16 ${THEME_CLASSES[theme]}`}
           >
             <div className="mx-auto max-w-6xl">
               <div className="mb-8 flex items-baseline gap-4">
