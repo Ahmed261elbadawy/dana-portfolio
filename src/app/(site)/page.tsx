@@ -8,6 +8,7 @@ import { SkillsCertifications } from "@/components/home/skills-certifications";
 import { Polaroid } from "@/components/home/polaroid";
 import { AnimatedStats } from "@/components/home/animated-stats";
 import { ContactBubbles } from "@/components/home/contact-bubbles";
+import { WaveSlot } from "@/components/wave-slot";
 import { Reveal } from "@/components/reveal";
 import { BoldText } from "@/components/bold-text";
 import { Magnetic } from "@/components/magnetic";
@@ -90,6 +91,7 @@ export default async function Home() {
         data-nav-theme="dark"
         className="relative scroll-mt-20 bg-burgundy px-5 pb-16 pt-28 text-cream sm:px-8 sm:pb-24 sm:pt-32 lg:px-16"
       >
+        <WaveSlot />
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-x-16 lg:gap-y-7">
           <h1
             className="animate-rise-in relative z-30 order-1 whitespace-nowrap text-center font-display text-5xl italic leading-[0.9] sm:text-6xl lg:order-2 lg:col-start-1 lg:text-left lg:text-7xl xl:text-8xl"
@@ -161,7 +163,8 @@ export default async function Home() {
         data-nav-theme="light"
         className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
       >
-        <div className="relative z-30 mx-auto max-w-6xl space-y-10">
+        <WaveSlot />
+        <div className="mx-auto max-w-6xl space-y-10">
           <Reveal className="max-w-2xl space-y-3">
             <p className="text-lg font-semibold uppercase tracking-wide text-burgundy">
               What I actually do
@@ -208,7 +211,8 @@ export default async function Home() {
         data-nav-theme="dark"
         className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-burgundy pb-14 pt-12 text-cream sm:pb-20 sm:pt-12"
       >
-        <div className="relative z-30 mx-auto max-w-6xl space-y-10 px-5 sm:px-8 lg:px-16">
+        <WaveSlot />
+        <div className="mx-auto max-w-6xl space-y-10 px-5 sm:px-8 lg:px-16">
           <Reveal className="flex items-center justify-between gap-4 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:justify-normal">
             <span aria-hidden="true" className="hidden sm:block" />
             <h2 className="font-display text-display-md sm:text-center">
@@ -250,7 +254,8 @@ export default async function Home() {
           data-nav-theme="light"
           className="relative z-10 -mt-7 rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
         >
-          <div className="relative z-30 mx-auto max-w-6xl space-y-8">
+          <WaveSlot />
+          <div className="mx-auto max-w-6xl space-y-8">
             <Reveal className="space-y-1">
               <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
                 Testimonials
@@ -313,6 +318,7 @@ export default async function Home() {
         data-nav-theme="light"
         className="relative z-10 -mt-7 scroll-mt-20 overflow-hidden rounded-t-card-lg bg-pink px-5 pb-24 pt-20 sm:px-8 sm:py-28 lg:px-16"
       >
+        <WaveSlot />
         <ContactBubbles />
         <div
           data-bubble-safe
