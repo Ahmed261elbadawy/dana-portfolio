@@ -1,5 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import type { Brand } from "@/lib/types/database";
 import { SERVICE_LABELS } from "@/lib/content";
 import { TiltCard } from "@/components/tilt-card";
@@ -11,8 +13,66 @@ function isVideoUrl(url: string) {
   return VIDEO_EXT.test(url);
 }
 
+function Lightbox({ project, onClose }: { project: Brand; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
+  const url = project.cover_image_url;
+  const isVideo = url ? isVideoUrl(url) : false;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/90 p-4 sm:p-10"
+      onClick={onClose}
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-cream/10 text-2xl leading-none text-cream transition-colors hover:bg-cream/20"
+      >
+        ×
+      </button>
+
+      {url && (
+        <div
+          className="relative max-h-[90vh] max-w-[92vw]"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {isVideo ? (
+            <video
+              src={url}
+              className="max-h-[90vh] max-w-[92vw] rounded-card"
+              controls
+              autoPlay
+              playsInline
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={url}
+              alt={`${project.name}, ${project.industry || "project"} cover`}
+              className="max-h-[90vh] max-w-[92vw] rounded-card object-contain"
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function WorkGrid({ projects }: { projects: Brand[] }) {
   const visible = projects;
+  const [openProject, setOpenProject] = useState<Brand | null>(null);
 
   return (
     <div className="space-y-6">
@@ -21,10 +81,11 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
           const tilt = TILTS[i % TILTS.length];
 
           return (
-            <Link
+            <button
               key={project.id}
-              href={`/work/${project.slug}`}
-              className="group w-[66%] min-w-[220px] shrink-0 snap-start sm:w-72"
+              type="button"
+              onClick={() => setOpenProject(project)}
+              className="group w-[66%] min-w-[220px] shrink-0 snap-start text-left sm:w-72"
             >
               <TiltCard>
               <div
@@ -95,10 +156,14 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
                 </div>
               </div>
               </TiltCard>
-            </Link>
+            </button>
           );
         })}
       </div>
+
+      {openProject && (
+        <Lightbox project={openProject} onClose={() => setOpenProject(null)} />
+      )}
     </div>
   );
 }
