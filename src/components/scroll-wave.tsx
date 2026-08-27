@@ -117,7 +117,7 @@ export function ScrollWave() {
       {geometry && (
         <>
           <svg
-            className="absolute inset-0 h-full w-full"
+            className="absolute inset-0 h-full w-full mix-blend-difference"
             viewBox={`0 0 ${VB_WIDTH} ${geometry.height}`}
             preserveAspectRatio="none"
           >
@@ -125,11 +125,10 @@ export function ScrollWave() {
               ref={pathRef}
               d={geometry.path}
               fill="none"
-              stroke="var(--color-cream, #F7F1E6)"
-              strokeWidth={5}
+              stroke="#F7F1E6"
+              strokeWidth={7}
               strokeLinecap="round"
-              vectorEffect="non-scaling-stroke"
-              className="mix-blend-difference transition-[stroke-dashoffset] duration-150 ease-out"
+              className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
           </svg>
           <div
