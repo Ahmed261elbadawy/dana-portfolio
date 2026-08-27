@@ -14,17 +14,21 @@ import { createPortal } from "react-dom";
 // context. Injecting real segments as each section's own first child
 // sidesteps that entirely: normal DOM paint order handles it.
 //
-// Each segment uses a flat SOLID color (not a gradient) — a gradient
-// stroke combined with vector-effect="non-scaling-stroke" doesn't render
-// reliably across browsers (confirmed earlier: valid geometry, nothing
-// painted). Solid color + non-scaling-stroke is the combination that's
-// been verified (via canvas pixel sampling) to actually paint.
+// Each segment uses a flat SOLID color (not a gradient) for the main
+// stroke — a gradient stroke combined with vector-effect
+// "non-scaling-stroke" doesn't render reliably across browsers (confirmed
+// earlier: valid geometry, nothing painted). Solid color + non-scaling-
+// stroke is the combination verified via canvas pixel sampling to
+// actually paint. The soft fade at the leading tip (see fadeRefs below)
+// is a second short overlapping stroke with its own small gradient, not
+// the main stroke — so it isn't affected by that same bug.
 const VB_WIDTH = 100;
 const WAVELENGTH_PX = 520; // one full left-right swing, in real pixels
 const AMPLITUDE = 26; // swing distance from center, in viewBox units
 const MID_X = VB_WIDTH / 2;
 const CREAM = "#F7F1E6";
 const BURGUNDY = "#4A1226";
+const TIP_FADE_LEN = 90; // how much of the leading tip softens out
 
 function buildWavePath(height: number) {
   const cycles = Math.max(1, Math.ceil(height / WAVELENGTH_PX));
@@ -52,6 +56,9 @@ export function ScrollWave() {
     null,
   );
   const pathRefs = useRef<(SVGPathElement | null)[]>([]);
+  const fadeRefs = useRef<(SVGPathElement | null)[]>([]);
+  const fadeStopRefs = useRef<(SVGStopElement | null)[]>([]);
+  const fadeGradRefs = useRef<(SVGLinearGradientElement | null)[]>([]);
   const lengthRef = useRef(0);
 
   useEffect(() => {
@@ -113,21 +120,53 @@ export function ScrollWave() {
     probe.setAttribute("d", master.path);
     lengthRef.current = probe.getTotalLength();
 
-    // No rAF: two cheap inline style writes per segment, and the "only
-    // schedule a frame if one isn't pending" pattern can wedge permanently
-    // if that first frame is ever delayed (backgrounded tab during load).
+    // No rAF: cheap inline style/attribute writes, and the "only schedule
+    // a frame if one isn't pending" pattern can wedge permanently if that
+    // first frame is ever delayed (backgrounded tab during load).
     const update = () => {
       const doc = document.documentElement;
       const max = doc.scrollHeight - doc.clientHeight;
-      const pct = max > 0 ? Math.min(1, Math.max(0, doc.scrollTop / max)) : 0;
+      // Anchored to the viewport's vertical *center*, not its top edge —
+      // using the raw scroll fraction made the reveal point sit right at
+      // the top of the screen, reading as "too high" while scrolling.
+      const centerY = doc.scrollTop + window.innerHeight / 2;
+      const pct =
+        master.height > 0
+          ? Math.min(1, Math.max(0, centerY / master.height))
+          : 0;
       const length = lengthRef.current;
-      const dashoffset = length * (1 - pct);
+      const revealLength = length * pct;
+      const dashoffset = length - revealLength;
 
       for (const p of pathRefs.current) {
         if (!p) continue;
         p.style.strokeDasharray = `${length}`;
         p.style.strokeDashoffset = `${dashoffset}`;
         if (reduced) p.style.transition = "none";
+      }
+
+      // Soft fade at the leading tip: a short second stroke covering only
+      // the last TIP_FADE_LEN of the revealed length, colored by a small
+      // gradient that runs from solid (matching the main line) to fully
+      // transparent right at the tip — recomputed every frame since the
+      // tip is constantly moving.
+      const fadeStart = Math.max(0, revealLength - TIP_FADE_LEN);
+      for (let i = 0; i < fadeRefs.current.length; i++) {
+        const fp = fadeRefs.current[i];
+        const grad = fadeGradRefs.current[i];
+        if (!fp) continue;
+        fp.style.strokeDasharray = `${TIP_FADE_LEN} ${length}`;
+        fp.style.strokeDashoffset = `${TIP_FADE_LEN - revealLength}`;
+        if (reduced) fp.style.transition = "none";
+
+        if (grad && probe.getTotalLength() > 0) {
+          const from = probe.getPointAtLength(fadeStart);
+          const to = probe.getPointAtLength(revealLength);
+          grad.setAttribute("x1", `${from.x}`);
+          grad.setAttribute("y1", `${from.y}`);
+          grad.setAttribute("x2", `${to.x}`);
+          grad.setAttribute("y2", `${to.y}`);
+        }
       }
     };
 
@@ -145,14 +184,34 @@ export function ScrollWave() {
 
   return (
     <>
-      {segments.map((s, i) =>
-        createPortal(
+      {segments.map((s, i) => {
+        const gradId = `scroll-wave-fade-${i}`;
+        return createPortal(
           <svg
             key={i}
             className="absolute inset-0 h-full w-full"
             viewBox={`0 ${s.top} ${VB_WIDTH} ${s.height}`}
             preserveAspectRatio="none"
           >
+            <defs>
+              <linearGradient
+                ref={(el) => {
+                  fadeGradRefs.current[i] = el;
+                }}
+                id={gradId}
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop
+                  ref={(el) => {
+                    fadeStopRefs.current[i] = el;
+                  }}
+                  offset="0"
+                  stopColor={s.color}
+                  stopOpacity="1"
+                />
+                <stop offset="1" stopColor={s.color} stopOpacity="0" />
+              </linearGradient>
+            </defs>
             <path
               ref={(el) => {
                 pathRefs.current[i] = el;
@@ -164,10 +223,21 @@ export function ScrollWave() {
               strokeLinecap="round"
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
+            <path
+              ref={(el) => {
+                fadeRefs.current[i] = el;
+              }}
+              d={master.path}
+              fill="none"
+              stroke={`url(#${gradId})`}
+              strokeWidth={1.4}
+              strokeLinecap="round"
+              className="transition-[stroke-dashoffset] duration-150 ease-out"
+            />
           </svg>,
           s.slot,
-        ),
-      )}
+        );
+      })}
     </>
   );
 }
