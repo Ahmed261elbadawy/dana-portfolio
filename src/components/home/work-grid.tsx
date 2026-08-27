@@ -85,7 +85,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
               key={project.id}
               type="button"
               onClick={() => setOpenProject(project)}
-              className="group w-[66%] min-w-[220px] shrink-0 snap-start text-left sm:w-72"
+              className="group relative z-30 w-[66%] min-w-[220px] shrink-0 snap-start text-left sm:w-72"
             >
               <TiltCard>
               <div

@@ -7,7 +7,7 @@ export function TrustedStrip({ logos }: { logos: BrandLogo[] }) {
       data-nav-theme="light"
       className="bg-paper px-5 py-10 sm:px-8 sm:py-14 lg:px-16"
     >
-      <div className="mx-auto max-w-6xl space-y-8">
+      <div className="relative z-30 mx-auto max-w-6xl space-y-8">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-burgundy/55">
           Brands I&apos;ve worked with
         </p>

@@ -92,14 +92,14 @@ export default async function Home() {
       >
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-x-16 lg:gap-y-7">
           <h1
-            className="animate-rise-in order-1 whitespace-nowrap text-center font-display text-5xl italic leading-[0.9] sm:text-6xl lg:order-2 lg:col-start-1 lg:text-left lg:text-7xl xl:text-8xl"
+            className="animate-rise-in relative z-30 order-1 whitespace-nowrap text-center font-display text-5xl italic leading-[0.9] sm:text-6xl lg:order-2 lg:col-start-1 lg:text-left lg:text-7xl xl:text-8xl"
             style={{ animationDelay: "0ms" }}
           >
             Dana Badawy
           </h1>
 
           <span
-            className="animate-rise-in order-2 flex flex-wrap items-center justify-center gap-x-1.5 justify-self-center text-xs font-semibold uppercase tracking-wide text-cream/60 sm:inline-flex sm:w-fit sm:justify-start sm:justify-self-center sm:rounded-pill sm:bg-cream sm:px-4 sm:py-2 sm:text-burgundy sm:shadow-sm lg:order-1 lg:col-start-1 lg:justify-self-start"
+            className="animate-rise-in relative z-30 order-2 flex flex-wrap items-center justify-center gap-x-1.5 justify-self-center text-xs font-semibold uppercase tracking-wide text-cream/60 sm:inline-flex sm:w-fit sm:justify-start sm:justify-self-center sm:rounded-pill sm:bg-cream sm:px-4 sm:py-2 sm:text-burgundy sm:shadow-sm lg:order-1 lg:col-start-1 lg:justify-self-start"
             style={{ animationDelay: "90ms" }}
           >
             {FALLBACK_ROLE_PARTS.map((part, i) => (
@@ -111,7 +111,7 @@ export default async function Home() {
           </span>
 
           <div
-            className="animate-rise-in order-4 max-w-2xl space-y-3 text-base text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
+            className="animate-rise-in relative z-30 order-4 max-w-2xl space-y-3 text-base text-cream/80 sm:text-xl lg:order-3 lg:col-start-1"
             style={{ animationDelay: "180ms" }}
           >
             {intro
@@ -125,7 +125,7 @@ export default async function Home() {
           </div>
 
           <div
-            className="animate-rise-in order-3 lg:order-4 lg:col-start-1"
+            className="animate-rise-in relative z-30 order-3 lg:order-4 lg:col-start-1"
             style={{ animationDelay: "220ms" }}
           >
             <AnimatedStats stats={FALLBACK_STATS} />
@@ -133,7 +133,7 @@ export default async function Home() {
 
           <Parallax
             strength={0.06}
-            className="order-5 mx-auto w-full max-w-[280px] lg:order-1 lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:max-w-none lg:self-center"
+            className="relative z-30 order-5 mx-auto w-full max-w-[280px] lg:order-1 lg:col-start-2 lg:row-start-1 lg:row-span-4 lg:max-w-none lg:self-center"
           >
             <TiltCard
               className="animate-rise-in"
@@ -161,7 +161,7 @@ export default async function Home() {
         data-nav-theme="light"
         className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
       >
-        <div className="mx-auto max-w-6xl space-y-10">
+        <div className="relative z-30 mx-auto max-w-6xl space-y-10">
           <Reveal className="max-w-2xl space-y-3">
             <p className="text-lg font-semibold uppercase tracking-wide text-burgundy">
               What I actually do
@@ -208,7 +208,7 @@ export default async function Home() {
         data-nav-theme="dark"
         className="relative z-10 -mt-7 scroll-mt-20 rounded-t-card-lg bg-burgundy pb-14 pt-12 text-cream sm:pb-20 sm:pt-12"
       >
-        <div className="mx-auto max-w-6xl space-y-10 px-5 sm:px-8 lg:px-16">
+        <div className="relative z-30 mx-auto max-w-6xl space-y-10 px-5 sm:px-8 lg:px-16">
           <Reveal className="flex items-center justify-between gap-4 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:justify-normal">
             <span aria-hidden="true" className="hidden sm:block" />
             <h2 className="font-display text-display-md sm:text-center">
@@ -250,7 +250,7 @@ export default async function Home() {
           data-nav-theme="light"
           className="relative z-10 -mt-7 rounded-t-card-lg bg-cream px-5 py-14 sm:px-8 sm:py-20 lg:px-16"
         >
-          <div className="mx-auto max-w-6xl space-y-8">
+          <div className="relative z-30 mx-auto max-w-6xl space-y-8">
             <Reveal className="space-y-1">
               <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">
                 Testimonials
@@ -316,7 +316,7 @@ export default async function Home() {
         <ContactBubbles />
         <div
           data-bubble-safe
-          className="relative z-10 mx-auto w-full max-w-3xl"
+          className="relative z-30 mx-auto w-full max-w-3xl"
         >
         <Reveal className="space-y-7 text-center">
           <p className="text-sm font-semibold uppercase tracking-wide text-burgundy">

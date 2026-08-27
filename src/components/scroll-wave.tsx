@@ -106,7 +106,6 @@ function buildStops(wrapper: HTMLElement, height: number): Stop[] {
 export function ScrollWave() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
   const lengthRef = useRef(0);
   const [geometry, setGeometry] = useState<{
     height: number;
@@ -147,7 +146,6 @@ export function ScrollWave() {
 
   useEffect(() => {
     const path = pathRef.current;
-    const dot = dotRef.current;
     if (!path || !geometry) return;
 
     const reduced = window.matchMedia(
@@ -159,10 +157,9 @@ export function ScrollWave() {
     path.style.strokeDashoffset = `${lengthRef.current}`;
     if (reduced) {
       path.style.transition = "none";
-      if (dot) dot.style.transition = "none";
     }
 
-    // No rAF here: these are two cheap inline style writes, and the "only
+    // No rAF here: this is one cheap inline style write, and the "only
     // schedule a frame if one isn't pending" pattern can wedge permanently
     // if that first frame is ever delayed (backgrounded tab during load).
     const update = () => {
@@ -172,12 +169,6 @@ export function ScrollWave() {
       const length = lengthRef.current;
 
       path.style.strokeDashoffset = `${length * (1 - pct)}`;
-
-      if (dot) {
-        const point = path.getPointAtLength(length * pct);
-        dot.style.left = `${(point.x / VB_WIDTH) * 100}%`;
-        dot.style.top = `${(point.y / geometry.height) * 100}%`;
-      }
     };
 
     update();
@@ -227,11 +218,6 @@ export function ScrollWave() {
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
           </svg>
-          <div
-            ref={dotRef}
-            className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cream shadow-[0_0_0_3px_rgba(74,18,38,0.35),0_0_10px_rgba(0,0,0,0.4)]"
-            style={{ left: "50%", top: "0%" }}
-          />
         </>
       )}
     </div>
