@@ -229,10 +229,8 @@ export function ScrollWave() {
               d={master.path}
               fill="none"
               stroke={s.color}
-              strokeWidth={3.5}
-              strokeOpacity={0.55}
+              strokeWidth={1.4}
               strokeLinecap="round"
-              filter={`url(#${blurId})`}
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
             <path
