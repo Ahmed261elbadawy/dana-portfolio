@@ -130,8 +130,15 @@ export function ScrollWave() {
       // using the raw scroll fraction made the reveal point sit right at
       // the top of the screen, reading as "too high" while scrolling.
       const centerY = doc.scrollTop + window.innerHeight / 2;
-      const pct =
-        master.height > 0
+      // The footer sits below the last wave section, so once it's tall
+      // enough the viewport center can still be short of master.height
+      // even at max scroll — leaving the line visibly unfinished right
+      // where the last section ends. Force full reveal once the page
+      // can't scroll any further, regardless of that shortfall.
+      const atBottom = max > 0 && doc.scrollTop >= max - 2;
+      const pct = atBottom
+        ? 1
+        : master.height > 0
           ? Math.min(1, Math.max(0, centerY / master.height))
           : 0;
       const length = lengthRef.current;
@@ -186,7 +193,6 @@ export function ScrollWave() {
     <>
       {segments.map((s, i) => {
         const gradId = `scroll-wave-fade-${i}`;
-        const blurId = `scroll-wave-blur-${i}`;
         return createPortal(
           <svg
             key={i}
@@ -208,19 +214,10 @@ export function ScrollWave() {
                   }}
                   offset="0"
                   stopColor={s.color}
-                  stopOpacity="0.6"
+                  stopOpacity="1"
                 />
                 <stop offset="1" stopColor={s.color} stopOpacity="0" />
               </linearGradient>
-              <filter
-                id={blurId}
-                x="-50%"
-                y="-50%"
-                width="200%"
-                height="200%"
-              >
-                <feGaussianBlur stdDeviation="2.2" />
-              </filter>
             </defs>
             <path
               ref={(el) => {
@@ -240,9 +237,8 @@ export function ScrollWave() {
               d={master.path}
               fill="none"
               stroke={`url(#${gradId})`}
-              strokeWidth={3.5}
+              strokeWidth={1.4}
               strokeLinecap="round"
-              filter={`url(#${blurId})`}
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
           </svg>,
