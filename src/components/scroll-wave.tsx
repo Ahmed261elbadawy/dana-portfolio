@@ -186,6 +186,7 @@ export function ScrollWave() {
     <>
       {segments.map((s, i) => {
         const gradId = `scroll-wave-fade-${i}`;
+        const blurId = `scroll-wave-blur-${i}`;
         return createPortal(
           <svg
             key={i}
@@ -207,10 +208,19 @@ export function ScrollWave() {
                   }}
                   offset="0"
                   stopColor={s.color}
-                  stopOpacity="1"
+                  stopOpacity="0.6"
                 />
                 <stop offset="1" stopColor={s.color} stopOpacity="0" />
               </linearGradient>
+              <filter
+                id={blurId}
+                x="-50%"
+                y="-50%"
+                width="200%"
+                height="200%"
+              >
+                <feGaussianBlur stdDeviation="2.2" />
+              </filter>
             </defs>
             <path
               ref={(el) => {
@@ -219,8 +229,10 @@ export function ScrollWave() {
               d={master.path}
               fill="none"
               stroke={s.color}
-              strokeWidth={1.4}
+              strokeWidth={3.5}
+              strokeOpacity={0.55}
               strokeLinecap="round"
+              filter={`url(#${blurId})`}
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
             <path
@@ -230,8 +242,9 @@ export function ScrollWave() {
               d={master.path}
               fill="none"
               stroke={`url(#${gradId})`}
-              strokeWidth={1.4}
+              strokeWidth={3.5}
               strokeLinecap="round"
+              filter={`url(#${blurId})`}
               className="transition-[stroke-dashoffset] duration-150 ease-out"
             />
           </svg>,
