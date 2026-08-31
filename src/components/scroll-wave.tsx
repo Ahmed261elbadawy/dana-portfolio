@@ -87,8 +87,16 @@ export function ScrollWave() {
 
       const last = segs[segs.length - 1];
       const totalHeight = last.top + last.height;
+      // Always rebuild the shared path to match the real current extent.
+      // A staleness threshold here was the actual bug: on a page with a
+      // lot of async-loading media (videos still settling their layout
+      // well past a fixed timeout), segments keep tracking real DOM
+      // rects, but a "close enough, keep the old path" master would
+      // freeze at a shorter length — so a later segment's viewBox window
+      // would reach past where the frozen path actually has coordinates,
+      // and the curve would just stop mid-page instead of continuing.
       setMaster((prev) =>
-        prev && Math.abs(prev.height - totalHeight) < 40
+        prev && prev.height === totalHeight
           ? prev
           : { height: totalHeight, path: buildWavePath(totalHeight) },
       );
@@ -96,12 +104,14 @@ export function ScrollWave() {
     };
 
     measure();
-    const t1 = setTimeout(measure, 300);
-    const t2 = setTimeout(measure, 1200);
+    // Fixed timeouts can't know when async media (video metadata, images)
+    // finishes settling layout, so keep watching for real size changes
+    // instead of guessing a cutoff — for as long as the wave exists.
+    const ro = new ResizeObserver(measure);
+    ro.observe(document.body);
     window.addEventListener("resize", measure);
     return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
+      ro.disconnect();
       window.removeEventListener("resize", measure);
     };
   }, []);

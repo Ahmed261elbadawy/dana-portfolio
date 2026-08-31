@@ -113,7 +113,8 @@ function Lightbox({
   );
 }
 
-const PREVIEW_COUNT = 8;
+const PREVIEW_COUNT_MOBILE = 4;
+const PREVIEW_COUNT_DESKTOP = 8;
 
 const FADE_FROM: Record<string, string> = {
   dark: "from-burgundy",
@@ -130,9 +131,19 @@ export function MediaGrid({
 }) {
   const [openItem, setOpenItem] = useState<WorkGalleryItem | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [previewCount, setPreviewCount] = useState(PREVIEW_COUNT_DESKTOP);
 
-  const hasMore = items.length > PREVIEW_COUNT;
-  const visible = expanded ? items : items.slice(0, PREVIEW_COUNT);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    const update = () =>
+      setPreviewCount(mq.matches ? PREVIEW_COUNT_DESKTOP : PREVIEW_COUNT_MOBILE);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const hasMore = items.length > previewCount;
+  const visible = expanded ? items : items.slice(0, previewCount);
 
   return (
     <>
