@@ -196,7 +196,7 @@ export function ScrollWave() {
         return createPortal(
           <svg
             key={i}
-            className="absolute inset-0 h-full w-full"
+            className="absolute inset-0 hidden h-full w-full sm:block"
             viewBox={`0 ${s.top} ${VB_WIDTH} ${s.height}`}
             preserveAspectRatio="none"
           >
