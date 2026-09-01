@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { WorkGalleryItem } from "@/lib/types/database";
 
@@ -8,6 +8,48 @@ const VIDEO_EXT = /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i;
 
 function isVideoUrl(url: string) {
   return VIDEO_EXT.test(url);
+}
+
+// Every tile used autoPlay with no preload control, so a visitor loading
+// this page fetched and streamed every video in every section at once —
+// including ones scrolled off-screen. With dozens of videos on this page
+// that's a lot of wasted bandwidth per visit. Loading the actual video
+// source only once a tile is near the viewport, and pausing/releasing it
+// once it scrolls away, keeps each visit to roughly what's actually seen.
+function VideoTile({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          el.play().catch(() => {});
+        } else {
+          el.pause();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={shouldLoad ? src : undefined}
+      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+      muted
+      loop
+      playsInline
+      preload="none"
+    />
+  );
 }
 
 function MediaTile({
@@ -27,14 +69,7 @@ function MediaTile({
       className="group relative block aspect-[3/4] w-full overflow-hidden rounded-card bg-paper/10"
     >
       {isVideo ? (
-        <video
-          src={item.media_url}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          autoPlay
-          muted
-          loop
-          playsInline
-        />
+        <VideoTile src={item.media_url} />
       ) : (
         <Image
           src={item.media_url}

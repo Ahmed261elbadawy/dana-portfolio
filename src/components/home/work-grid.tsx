@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { Brand } from "@/lib/types/database";
 import { SERVICE_LABELS } from "@/lib/content";
@@ -11,6 +11,43 @@ const VIDEO_EXT = /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i;
 
 function isVideoUrl(url: string) {
   return VIDEO_EXT.test(url);
+}
+
+// Loads and plays only once the card is near the viewport, instead of every
+// cover video in the row streaming immediately on page load.
+function CoverVideo({ src }: { src: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          el.play().catch(() => {});
+        } else {
+          el.pause();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      src={shouldLoad ? src : undefined}
+      className="absolute inset-0 h-full w-full object-cover"
+      muted
+      loop
+      playsInline
+      preload="none"
+    />
+  );
 }
 
 function Lightbox({ project, onClose }: { project: Brand; onClose: () => void }) {
@@ -95,15 +132,7 @@ export function WorkGrid({ projects }: { projects: Brand[] }) {
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-pink">
                   {project.cover_image_url ? (
                     isVideoUrl(project.cover_image_url) ? (
-                      <video
-                        src={project.cover_image_url}
-                        className="absolute inset-0 h-full w-full object-cover"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                      />
+                      <CoverVideo src={project.cover_image_url} />
                     ) : (
                       <Image
                         src={project.cover_image_url}
