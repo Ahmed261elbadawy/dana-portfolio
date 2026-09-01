@@ -12,11 +12,9 @@ function isVideoUrl(url: string) {
 
 function MediaTile({
   item,
-  tall,
   onOpen,
 }: {
   item: WorkGalleryItem;
-  tall: boolean;
   onOpen: () => void;
 }) {
   const isVideo = isVideoUrl(item.media_url);
@@ -26,9 +24,7 @@ function MediaTile({
       type="button"
       onClick={onOpen}
       aria-label={item.alt_text || "Open media"}
-      className={`group relative mb-3 block w-full break-inside-avoid overflow-hidden rounded-card bg-paper/10 ${
-        tall ? "aspect-[3/4]" : "aspect-square"
-      }`}
+      className="group relative block aspect-[3/4] w-full overflow-hidden rounded-card bg-paper/10"
     >
       {isVideo ? (
         <video
@@ -148,12 +144,11 @@ export function MediaGrid({
   return (
     <>
       <div className="relative">
-        <div className="columns-2 gap-3 sm:columns-3 lg:columns-4">
-          {visible.map((item, i) => (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {visible.map((item) => (
             <MediaTile
               key={item.id}
               item={item}
-              tall={i % 3 !== 1}
               onOpen={() => setOpenItem(item)}
             />
           ))}
