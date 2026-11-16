@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { Brand } from "@/lib/types/database";
 import { SERVICE_LABELS } from "@/lib/content";
@@ -13,39 +13,20 @@ function isVideoUrl(url: string) {
   return VIDEO_EXT.test(url);
 }
 
-// Loads and plays only once the card is near the viewport, instead of every
-// cover video in the row streaming immediately on page load.
+// All cover videos load and play at the same time on purpose: the row is a
+// horizontal carousel, so cards off to the right are never "near the
+// viewport" and a visibility-based lazy loader leaves them as blank pink
+// boxes. The row only holds a handful of small clips, so this is cheap.
 function CoverVideo({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  const [shouldLoad, setShouldLoad] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoad(true);
-          el.play().catch(() => {});
-        } else {
-          el.pause();
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   return (
     <video
-      ref={ref}
-      src={shouldLoad ? src : undefined}
+      src={src}
       className="absolute inset-0 h-full w-full object-cover"
+      autoPlay
       muted
       loop
       playsInline
-      preload="none"
+      preload="auto"
     />
   );
 }
