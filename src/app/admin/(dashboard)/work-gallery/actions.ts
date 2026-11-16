@@ -34,6 +34,21 @@ export async function upsertWorkGalleryItem(
     if (uploadError) return { error: `Upload failed: ${uploadError.message}` };
     const { data } = supabase.storage.from(bucket).getPublicUrl(path);
     mediaUrl = data.publicUrl;
+
+    // Cover still for videos, captured in the browser while picking the
+    // file. Stored as images/posters/<same base name>.jpg, which is where
+    // the gallery looks for it (see posterUrlFor in lib/media.ts). Failing
+    // to store it is not fatal — the site falls back to the first frame.
+    const posterFile = formData.get("poster") as File | null;
+    if (isVideo && posterFile && posterFile.size > 0) {
+      const base = path.replace(/\.[^.]+$/, "");
+      await supabase.storage
+        .from("images")
+        .upload(`posters/${base}.jpg`, posterFile, {
+          upsert: true,
+          contentType: "image/jpeg",
+        });
+    }
   }
 
   if (id) {

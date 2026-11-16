@@ -1,54 +1,49 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { WorkGalleryItem } from "@/lib/types/database";
+import { isVideoUrl, posterUrlFor } from "@/lib/media";
 
-const VIDEO_EXT = /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i;
-
-function isVideoUrl(url: string) {
-  return VIDEO_EXT.test(url);
-}
-
-// Every tile used autoPlay with no preload control, so a visitor loading
-// this page fetched and streamed every video in every section at once —
-// including ones scrolled off-screen. With dozens of videos on this page
-// that's a lot of wasted bandwidth per visit. Loading the actual video
-// source only once a tile is near the viewport, and pausing/releasing it
-// once it scrolls away, keeps each visit to roughly what's actually seen.
+// Grid tiles for videos show a still cover image only — no video bytes are
+// fetched until someone taps a tile and the lightbox opens. Tiles used to
+// autoplay every clip at once, which streamed every video on the page for
+// every visitor and was what exhausted the storage bandwidth quota.
 function VideoTile({ src }: { src: string }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [shouldLoad, setShouldLoad] = useState(false);
-
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoad(true);
-          el.play().catch(() => {});
-        } else {
-          el.pause();
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  const [posterFailed, setPosterFailed] = useState(false);
 
   return (
-    <video
-      ref={videoRef}
-      src={shouldLoad ? src : undefined}
-      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-      muted
-      loop
-      playsInline
-      preload="none"
-    />
+    <>
+      {posterFailed ? (
+        // No poster on file (e.g. uploaded before posters existed): fall
+        // back to the video's own first frame, metadata only.
+        <video
+          src={`${src}#t=0.1`}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          muted
+          playsInline
+          preload="metadata"
+        />
+      ) : (
+        <Image
+          src={posterUrlFor(src)}
+          alt=""
+          fill
+          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+          onError={() => setPosterFailed(true)}
+        />
+      )}
+      <span
+        aria-hidden="true"
+        className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-ink/55 text-cream backdrop-blur-sm"
+      >
+        <svg viewBox="0 0 24 24" className="ml-0.5 h-4 w-4" fill="currentColor">
+          <path d="M8 5.5v13l11-6.5z" />
+        </svg>
+      </span>
+    </>
   );
 }
 

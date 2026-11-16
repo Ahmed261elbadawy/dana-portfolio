@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { upsertWorkGalleryItem } from "./actions";
 import type { WorkGalleryCategory, WorkGalleryItem } from "@/lib/types/database";
 
@@ -12,6 +12,46 @@ const CATEGORY_OPTIONS: { value: WorkGalleryCategory; label: string }[] = [
 
 const VIDEO_EXT = /\.(mp4|webm|mov|m4v|ogg)(\?.*)?$/i;
 
+function clearPoster(input: HTMLInputElement | null) {
+  if (input) input.value = "";
+}
+
+// Grabs a frame ~1s in and drops it into the hidden "poster" file input.
+// Best effort: if the browser can't decode the video (some .mov codecs),
+// the poster is simply skipped and the site falls back to the video's own
+// first frame.
+function captureVideoPoster(url: string, input: HTMLInputElement | null) {
+  clearPoster(input);
+  if (!input) return;
+
+  const video = document.createElement("video");
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = "auto";
+  video.src = url;
+
+  video.addEventListener("loadeddata", () => {
+    video.currentTime = Math.min(1, (video.duration || 1) / 2);
+  });
+  video.addEventListener("seeked", () => {
+    const scale = Math.min(1, 720 / (video.videoWidth || 720));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(video.videoWidth * scale);
+    canvas.height = Math.round(video.videoHeight * scale);
+    canvas.getContext("2d")?.drawImage(video, 0, 0, canvas.width, canvas.height);
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) return;
+        const dt = new DataTransfer();
+        dt.items.add(new File([blob], "poster.jpg", { type: "image/jpeg" }));
+        input.files = dt.files;
+      },
+      "image/jpeg",
+      0.82,
+    );
+  });
+}
+
 export function WorkGalleryForm({
   item,
   defaultCategory,
@@ -20,6 +60,7 @@ export function WorkGalleryForm({
   defaultCategory?: WorkGalleryCategory;
 }) {
   const [state, formAction, pending] = useActionState(upsertWorkGalleryItem, null);
+  const posterInputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(item?.media_url ?? null);
   const [previewIsVideo, setPreviewIsVideo] = useState(
     VIDEO_EXT.test(item?.media_url ?? ""),
@@ -78,11 +119,25 @@ export function WorkGalleryForm({
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file) {
-              setPreviewIsVideo(file.type.startsWith("video/"));
-              setPreview(URL.createObjectURL(file));
+              const isVideo = file.type.startsWith("video/");
+              const url = URL.createObjectURL(file);
+              setPreviewIsVideo(isVideo);
+              setPreview(url);
+              if (isVideo) captureVideoPoster(url, posterInputRef.current);
+              else clearPoster(posterInputRef.current);
             }
           }}
           className="w-full text-sm"
+        />
+        {/* Filled in automatically with a still frame when a video is
+            picked; the save action stores it as the video's cover photo. */}
+        <input
+          ref={posterInputRef}
+          name="poster"
+          type="file"
+          className="hidden"
+          tabIndex={-1}
+          aria-hidden="true"
         />
       </div>
 
